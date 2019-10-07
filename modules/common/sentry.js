@@ -11,8 +11,7 @@ const isEnabled = process.env.NODE_ENV === 'production';
  */
 function install() {
   if (!isEnabled) return false;
-  Raven.config(sentryDns).install();
-  return true;
+  return Raven.config(sentryDns).install();
 }
 
 /**
@@ -23,8 +22,7 @@ function install() {
  */
 function addRequestHandler(app) {
   if (!isEnabled) return false;
-  app.use(Raven.requestHandler());
-  return true;
+  return app.use(Raven.requestHandler());
 }
 
 /**
@@ -35,8 +33,7 @@ function addRequestHandler(app) {
  */
 function addErrorHandler(app) {
   if (!isEnabled) return false;
-  app.use(Raven.errorHandler());
-  return true;
+  return app.use(Raven.errorHandler());
 }
 
 module.exports = {

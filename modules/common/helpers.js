@@ -1,5 +1,4 @@
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt-nodejs');
 const ms = require('ms');
 const mongoose = require('mongoose');
 const validate = require('validate.js');
@@ -80,14 +79,6 @@ function connectToDb() {
   return mongoose.connect(config.db.uri, options);
 }
 
-function encryptPassword(value) {
-  return bcrypt.hashSync(value);
-}
-
-function verifyPassword(value, hash) {
-  return bcrypt.compareSync(value, hash);
-}
-
 /**
  * Create an access token for user
  * @param {Object} user
@@ -103,7 +94,7 @@ function createToken(user, duration) {
   };
 }
 
-function verifyToken(token) {
+function decryptToken(token) {
   let result = false;
   try {
     result = jwt.verify(token, config.appSecret);
@@ -221,26 +212,24 @@ function formatDateTime(value) {
 }
 
 module.exports = {
+  connectToDb,
+  createToken,
+  decryptToken,
+  getObjectValue,
+  filterObjectKeys,
+  createWebUrl,
+  round,
+  buildQuery,
+  escapeRegExp,
   notFoundExc,
   validationExc,
   serverExc,
   unauthorizedExc,
-  connectToDb,
-  encryptPassword,
-  verifyPassword,
-  createToken,
-  verifyToken,
-  getObjectValue,
-  filterObjectKeys,
-  createWebUrl,
   randomCode,
-  round,
   getDatePart,
-  buildQuery,
   getTimeDiff,
   timeout,
   pad,
-  escapeRegExp,
   generateRandomPassword,
   formatDate,
   formatDateTime,
