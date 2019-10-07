@@ -1,41 +1,41 @@
-const s3 = require('./s3')
-const File = require('../common/models/file')
-const { notFoundExc } = require('../common/helpers')
-
-const { validateFileData, validationExc } = require('./helpers')
+const s3 = require('./s3');
+const { sendTestMail } = require('./mail');
 
 // get upload params to support uploading file on front end
 async function getUploadParams(req, res, next) {
-  return res.json(s3.getUploadParams())
+  try {
+    return res.json(s3.getUploadParams());
+  } catch (err) {
+    return next(err);
+  }
 }
 
-// add a file metadata to database
-async function addFile(req, res, next) {
+async function sendTestEmail(req, res, next) {
   try {
-    var data = req.body
-    var errors = validateFileData(data)
-    if (errors) {
-      return next(validationExc('Invalid file data', errors))
-    }
-
-    var file = new File({
-      url: data.url,
-      filename: data.filename,
-      type: data.type,
-      meta: {
-        ['s3-bucket']: data.bucket,
-        ['s3-region']: data.region,
-        ['s3-key']: data.key
-      }
-    })
-    await file.save()
-    return res.json(file)
+    await sendTestMail({ to: req.body.email });
+    res.json({ message: 'Email sent' });
   } catch (err) {
-    next(err)
+    next(err);
+  }
+}
+
+function testView(req, res, next) {
+  try {
+    res.render('test', {
+      name: 'John',
+      appName: 'handel',
+      abn: '123456',
+      email: 'a@m.mm',
+      phone: '0909397890',
+      address: '208 nguyen huu canh',
+    });
+  } catch (err) {
+    next(err);
   }
 }
 
 module.exports = {
   getUploadParams,
-  addFile,
-}
+  sendTestEmail,
+  testView,
+};
