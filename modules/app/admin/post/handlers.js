@@ -1,5 +1,5 @@
-const Post = require('../models/post')
-const { validationExc, notFoundExc } = require('../../common/helpers')
+const Post = require('../../models/post')
+const { validationExc, notFoundExc } = require('../../../common/helpers')
 const { validatePost, getQueryData } = require('./helpers')
 
 async function getPosts(req, res, next) {

@@ -1,55 +1,62 @@
 const mongoose = require('mongoose');
-const passwordGenerator = require('generate-password');
-const {
-  encryptPassword,
-  verifyPassword,
-  createToken,
-} = require('../../common/helpers');
+const bcrypt = require('bcrypt-nodejs');
+const { createToken, decryptToken } = require('../../common/helpers');
 
-const userSchema = mongoose.Schema({
-  username: { type: String, required: true, unique: true },
+const schema = mongoose.Schema({
   email: { type: String, required: true, unique: true },
+  displayName: { type: String },
   password: { type: String, required: true },
   status: { type: String, required: true },
-  profile: {
-    firstname: { type: String },
-    lastname: { type: String },
-    phone: { type: String },
-  },
+  roles: [{ type: String, required: true }],
 }, { timestamps: true });
 
-// user method for setting password
-userSchema.methods.setPassword = function setPassword(value) {
-  this.password = encryptPassword(value);
-};
+class ModelClass {
+  /**
+   * Update password for user
+   * @param {string} value raw password
+   */
+  setPassword(value) {
+    const hash = bcrypt.hashSync(value);
+    this.password = hash;
+  }
 
-// user method for validating password
-userSchema.methods.checkPassword = function checkPassword(value) {
-  return verifyPassword(value, this.password);
-};
+  /**
+   * Check password valid
+   * @param {boolean} value
+   */
+  isPasswordValid(value) {
+    return bcrypt.compareSync(value, this.password);
+  }
 
-// set random password and return random generated password to send to user
-userSchema.methods.autoSetRandomPassword = function setRandomPassword(len = 10) {
-  const password = passwordGenerator.generate({
-    length: len,
-    numbers: true,
-  });
-  this.setPassword(password);
-  return password;
-};
+  /**
+   * Generate a token object for reseting password
+   * @param {String} duration
+   */
+  createToken(duration) {
+    return createToken(this.id, duration);
+  }
 
-// create json web token that present this user
-userSchema.methods.createToken = function createUserToken(duration = '1h') {
-  return createToken(this, duration);
-};
+  /**
+   * Check if token is valid
+   * @param {String} value
+   */
+  isTokenValid(value) {
+    const data = decryptToken(value);
+    return data && data.value === this.id;
+  }
+}
 
-// define mogoose model
-const User = mongoose.model('common.users', userSchema);
+schema.loadClass(ModelClass);
+
+const User = mongoose.model('User', schema);
+
+// available user roles
+User.ROLE_ADMIN = 'Admin';
+User.ROLE_CUSTOMER = 'Customer';
 
 // available user statuses
 User.STATUS_PENDING = 'Pending';
 User.STATUS_ACTIVE = 'Active';
 User.STATUS_INACTIVE = 'Inactive';
-User.STATUS_DECLINED = 'Declined';
 
 module.exports = User;

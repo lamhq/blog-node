@@ -1,10 +1,10 @@
-const createMiddleware = require('../../common/jwt');
-const User = require('../models/user');
+const createMiddleware = require('../../../common/jwt');
+const User = require('../../models/user');
 const {
   validationExc,
   notFoundExc,
   verifyToken,
-} = require('../../common/helpers');
+} = require('../../../common/helpers');
 const {
   validateLoginData,
   validateRegistrationData,

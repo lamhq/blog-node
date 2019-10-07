@@ -4,7 +4,7 @@ const createMiddleware = require('../common/jwt');
 
 const verifyUserToken = createMiddleware(
   'jwtUser',
-  jwtPayload => User.findById(jwtPayload.userId),
+  (jwtPayload) => User.findById(jwtPayload.userId),
 );
 
 // return a new token using a valid user token
