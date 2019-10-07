@@ -1,2 +1,4 @@
-mongoimport --host localhost:27017 --db blog --collection common.users --file common.users.json --jsonArray --drop
-mongoimport --host localhost:27017 --db blog --collection blog.posts --file blog.posts.json --jsonArray --drop
+#!/bin/bash
+export URI=mongodb://localhost:27017/blog
+mongoimport --uri ${URI} --collection users --file users.json --jsonArray --drop
+mongoimport --uri ${URI} --collection posts --file posts.json --jsonArray --drop

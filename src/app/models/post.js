@@ -8,7 +8,7 @@ const postSchema = Schema({
   content: { type: String, required: true },
 }, { timestamps: true });
 
-// map schema to collection named `blog.posts`
-const Post = mongoose.model('blog.posts', postSchema);
+// map schema to collection named `posts`
+const Post = mongoose.model('Post', postSchema);
 
 module.exports = Post;

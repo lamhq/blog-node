@@ -1,2 +1,4 @@
-mongoexport --host localhost:27017 --db blog -c common.users --out common.users.json --jsonArray --pretty
-mongoexport --host localhost:27017 --db blog -c blog.posts --out blog.posts.json --jsonArray --pretty
+#!/bin/bash
+export URI=mongodb://localhost:27017/blog
+mongoexport --uri ${URI} -c users --out users.json --jsonArray --pretty
+mongoexport --uri ${URI} -c posts --out posts.json --jsonArray --pretty

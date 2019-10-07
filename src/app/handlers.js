@@ -13,7 +13,7 @@ async function refreshToken(req, res, next) {
   try {
     const { user } = req;
     res.json({
-      id: user._id,
+      id: user.id,
       token: user.createToken(config.accessTokenLifeTime),
     });
   } catch (err) {

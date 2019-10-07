@@ -4,10 +4,13 @@
 			"$oid": "59b39bcf538ff606c04d12db"
 		},
 		"__v": 0,
-		"username": "demo",
+		"displayName": "Albert Wesker",
 		"email": "demo@example.com",
 		"password": "$2a$10$ZfF2V9N3rpazJwveaYfXn.5ye7Sw8y9KfLMhAzk6iNPxZedKr8wO6",
 		"status": "Active",
+		"roles": [
+			"ADMIN"
+		],
 		"createdAt": {
 			"$date": "2018-03-16T09:26:28.311Z"
 		},

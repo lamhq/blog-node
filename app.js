@@ -1,13 +1,10 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
-const logger = require('./modules/common/log');
-const sentry = require('./modules/common/sentry');
-const { notFoundExc } = require('./modules/common/helpers');
-const appRouter = require('./modules/app/router');
-const blogRouter = require('./modules/app/admin/post/router');
-const adminRouter = require('./modules/app/admin/account/router');
-const commonRouter = require('./modules/common/router');
+const logger = require('./src/common/log');
+const sentry = require('./src/common/sentry');
+const { notFoundExc } = require('./src/common/helpers');
+const router = require('./router');
 
 const app = express();
 
@@ -23,13 +20,8 @@ app.use(morgan('tiny', {
   stream: logger.stream,
 }));
 
-// add module's middlewares
-app.use('/api/v1', [
-  commonRouter,
-  appRouter,
-  blogRouter,
-  adminRouter,
-]);
+// application router
+app.use(router);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => next(notFoundExc('No route found')));
