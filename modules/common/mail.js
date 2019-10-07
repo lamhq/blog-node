@@ -60,6 +60,7 @@ async function sendTestMail(data = null) {
     from: 'Tester <tester@gmail.com>',
     to: 'Recipient <daibanglam@gmail.com>',
     subject: 'This is a test email from Nodemailer',
+
     html: '<p>This <strong>email</strong> is used to check that our mail server is working</p>',
     ...data,
   };
