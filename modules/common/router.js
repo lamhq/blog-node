@@ -3,10 +3,10 @@ const handlers = require('./handlers');
 
 const router = express.Router();
 
-router.route('/cm/files/upload-params').get(handlers.getUploadParams);
+router.get('/cm/files/upload-params', handlers.getUploadParams);
 
 // test sendmail
-router.route('/test/mail').post(handlers.sendTestEmail);
+router.post('/test/mail', handlers.sendTestEmail);
 
 // test render html
 router.get('/test/view', handlers.testView);

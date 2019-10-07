@@ -1,16 +1,15 @@
-const path = require('path');
-
 const config = {
+  appName: 'React Blog',
+  appSecret: 'react blog secret',
+  basePath: __dirname,
   port: process.env.PORT || 3000,
+  accessTokenLifeTime: '3h',
   webUrl: process.env.WEB_URL,
+  sentryDns: process.env.SENTRY_DNS || false,
   db: {
     uri: process.env.DB_URI,
     debug: process.env.MONGOOSE_DEBUG === 'true',
   },
-  appName: 'React Blog',
-  appSecret: 'react blog secret',
-  logPath: process.env.LOG_PATH || path.resolve(__dirname, 'logs'),
-  sentryDns: process.env.SENTRY_DNS || false,
   mail: {
     transport: {
       host: process.env.SMTP_HOST,
@@ -22,12 +21,13 @@ const config = {
     },
     autoEmail: 'noreply@demo.com',
   },
-  accessTokenLifeTime: '3h',
-  s3Config: {
-    accessKeyId: 'AKIAJZYDLKBI7KI7ZF6Q',
-    secretAccessKey: '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',
-    bucket: 'lamhq',
-    region: 'ap-southeast-1',
+  awsConfig: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    region: process.env.AWS_REGION,
+    bucket: process.env.AWS_BUCKET,
+    websiteEndpoint: process.env.AWS_BUCKET_ENDPOINT,
+    objectKeyPrefix: 'upload/',
   },
 };
 

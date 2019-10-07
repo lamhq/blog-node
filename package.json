@@ -1,7 +1,7 @@
 {
-  "name": "react-blog-api",
+  "name": "rest-boilerplate-node",
   "version": "1.0.0",
-  "description": "Api server of react blog project",
+  "description": "Api server for a simple web app",
   "main": "index.js",
   "scripts": {
     "test": "mocha --exit",
@@ -39,6 +39,7 @@
     "eslint-plugin-import": "^2.18.2",
     "mocha": "^6.2.1",
     "mongodb": "^3.3.2",
+    "nodemon": "^1.19.3",
     "supertest": "^4.0.2"
   }
 }
