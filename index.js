@@ -2,8 +2,8 @@ require('dotenv').config();
 const http = require('http');
 const app = require('./app');
 const { port } = require('./config');
-const log = require('./modules/common/log');
-const { connectToDb } = require('./modules/common/helpers');
+const log = require('./src/common/log');
+const { connectToDb } = require('./src/common/helpers');
 
 const server = http.createServer(app);
 

@@ -12,8 +12,6 @@ const {
   validateForgotPwdData,
   validateResetPwdData,
   sendMailRequestResetPwd,
-  sendMailRegistrationToUser,
-  sendMailRegistrationToAdmin,
 } = require('./helpers');
 
 async function login(req, res, next) {
@@ -21,19 +19,18 @@ async function login(req, res, next) {
     const data = req.body;
     const errors = validateLoginData(data);
     if (errors) {
-      return next(validationExc('Please correct your input.', errors));
+      throw validationExc('Please correct your input.', errors);
     }
 
     const user = await User.findOne({ email: data.loginId });
-    if (!user || !user.checkPassword(data.password)) {
-      return res.status(400).json(validationExc('Invalid login information.',
-        { password: ['Incorrect username or password'] }));
+    if (!user || !user.isPasswordValid(data.password)) {
+      throw validationExc('Invalid login information.',
+        { password: ['Incorrect username or password'] });
     }
 
     res.json({
       token: user.createToken(data.remember ? '30 days' : '3h'),
-      username: user.username,
-      id: user._id,
+      user,
     });
   } catch (err) {
     next(err);
@@ -42,11 +39,11 @@ async function login(req, res, next) {
 
 async function getProfile(req, res, next) {
   try {
-    const user = await User.findById(req.user._id);
-    if (user) {
-      return res.json({ email: user.email, username: user.username });
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      throw notFoundExc('No profile data found');
     }
-    next(notFoundExc('No profile data found'));
+    res.json(user);
   } catch (err) {
     next(err);
   }
@@ -54,7 +51,7 @@ async function getProfile(req, res, next) {
 
 async function updateProfile(req, res, next) {
   try {
-    const user = await User.findById(req.user._id);
+    const user = await User.findById(req.user.id);
     const data = req.body;
     if (user) {
       const errors = validateProfileData(data, user);
@@ -75,7 +72,7 @@ async function updateProfile(req, res, next) {
   }
 }
 
-const verifyUserToken = createMiddleware('jwtAdmin', (jwtPayload) => User.findById(jwtPayload.userId));
+const verifyUserToken = createMiddleware('jwtAdmin', (jwtPayload) => User.findById(jwtPayload.value));
 
 async function requestResetPassword(req, res, next) {
   try {
@@ -107,7 +104,7 @@ async function resetPassword(req, res, next) {
 
     const decoded = verifyToken(data.token);
     const user = await User.findOne({
-      _id: decoded.userId,
+      id: decoded.userId,
       status: User.STATUS_ACTIVE,
     });
     user.setPassword(data.password);

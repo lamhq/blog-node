@@ -75,6 +75,7 @@ function connectToDb() {
   const options = {
     config: { autoIndex: false },
     useNewUrlParser: true,
+    useUnifiedTopology: true,
   };
   return mongoose.connect(config.db.uri, options);
 }
@@ -84,10 +85,10 @@ function connectToDb() {
  * @param {Object} user
  * @param {String} duration
  */
-function createToken(user, duration) {
+function createToken(id, duration) {
   const expireAt = new Date();
   expireAt.setSeconds(expireAt.getSeconds() + (ms(duration) / 1000));
-  const value = jwt.sign({ userId: user.id }, config.appSecret, { expiresIn: duration });
+  const value = jwt.sign({ value: id }, config.appSecret, { expiresIn: duration });
   return {
     value,
     expireAt,

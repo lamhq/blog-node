@@ -6,16 +6,16 @@ const config = require('../../../../config');
 const { sendMail } = require('../../../common/mail');
 const { verifyToken } = require('../../../common/helpers');
 
-function validateLoginForm(data) {
-  var rules = {
+function validateLoginData(data) {
+  const rules = {
     loginId: {
       presence: { message: '^Username can\'t be blank' },
     },
     password: {
       presence: true,
     },
-  }
-  return validate(data, rules, { format: 'grouped' })
+  };
+  return validate(data, rules, { format: 'grouped' });
 }
 
 /**
@@ -27,51 +27,50 @@ function validateLoginForm(data) {
 function validateProfileData(data, user) {
   // function that perform password validation
   validate.validators.checkPassword = function (value, options, key, attributes) {
-    if (value && !user.checkPassword(value))
-      return 'is wrong'
-    return null
-  }
+    if (value && !user.checkPassword(value)) { return 'is wrong'; }
+    return null;
+  };
 
   // validation rules
-  var rules = {
+  const rules = {
     username: {
       presence: true,
       length: { minimum: 3, maximum: 30 },
       format: {
         pattern: '[a-z0-9]+',
         flags: 'i',
-        message: 'can only contain alphabet and numeric characters'
-      }
+        message: 'can only contain alphabet and numeric characters',
+      },
     },
     email: {
       presence: true,
       email: true,
     },
-    password: function (value, attributes, attributeName, options, constraints) {
+    password(value, attributes, attributeName, options, constraints) {
       // only validate when value is not empty
       return value ? {
         length: { minimum: 6, maximum: 30 },
-      } : false
+      } : false;
     },
-    currentPassword: function (value, attributes, attributeName, options, constraints) {
+    currentPassword(value, attributes, attributeName, options, constraints) {
       // only validate when password is not empty
       return attributes.password ? {
         presence: true,
-        checkPassword: true
-      } : false
-    }
-  }
+        checkPassword: true,
+      } : false;
+    },
+  };
 
-  return validate(data, rules)
+  return validate(data, rules);
 }
 
 async function checkEmailExist(value) {
-  var user = await User.findOne({
+  const user = await User.findOne({
     email: value,
-  })
+  });
   return user
     ? Promise.resolve()
-    : Promise.resolve('does not exist or account is not enabled')
+    : Promise.resolve('does not exist or account is not enabled');
 }
 
 // validate required fields on forgot password form
@@ -98,44 +97,44 @@ async function validateForgotPwdData(data) {
 
 // validate.js custom async validate function to validate user is valid or not
 async function validateUserToken(value) {
-  var decoded = verifyToken(value)
-  if (!decoded) return Promise.resolve('invalid')
+  const decoded = verifyToken(value);
+  if (!decoded) return Promise.resolve('invalid');
 
-  var user = await User.findOne({
+  const user = await User.findOne({
     _id: decoded.userId,
-    status: User.STATUS_ACTIVE
-  })
+    status: User.STATUS_ACTIVE,
+  });
   return user
     ? Promise.resolve()
-    : Promise.resolve('is legal but the account does not exist.')
+    : Promise.resolve('is legal but the account does not exist.');
 }
 
 // validate form to update new password
 async function validateResetPwdData(data) {
-  validate.Promise = global.Promise
-  validate.validators.userToken = validateUserToken
-  var rules = {
+  validate.Promise = global.Promise;
+  validate.validators.userToken = validateUserToken;
+  const rules = {
     token: {
       presence: { allowEmpty: false },
-      userToken: true
+      userToken: true,
     },
     password: {
       presence: { allowEmpty: false },
-      length: { minimum: 6, maximum: 30 }
+      length: { minimum: 6, maximum: 30 },
     },
     verify: {
       presence: { allowEmpty: false },
-      equality: 'password'
-    }
-  }
+      equality: 'password',
+    },
+  };
 
-  var errors
+  let errors;
   try {
-    await validate.async(data, rules, { format: 'grouped' })
+    await validate.async(data, rules, { format: 'grouped' });
   } catch (err) {
-    errors = err
+    errors = err;
   }
-  return errors
+  return errors;
 }
 
 // send email to check containe link to reset password
@@ -221,7 +220,7 @@ function sendMailRegistrationToAdmin(user) {
 }
 
 module.exports = {
-  validateLoginForm,
+  validateLoginData,
   validateProfileData,
   validateForgotPwdData,
   sendMailRequestResetPwd,
