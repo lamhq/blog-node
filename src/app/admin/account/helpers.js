@@ -1,3 +1,4 @@
+/* eslint-disable arrow-body-style */
 const validate = require('validate.js');
 const querystring = require('querystring');
 const path = require('path');
@@ -26,33 +27,28 @@ function validateLoginData(data) {
  */
 function validateProfileData(data, user) {
   // function that perform password validation
-  validate.validators.checkPassword = function (value, options, key, attributes) {
-    if (value && !user.checkPassword(value)) { return 'is wrong'; }
+  validate.validators.checkPassword = (value) => {
+    if (value && !user.isPasswordValid(value)) { return 'is wrong'; }
     return null;
   };
 
   // validation rules
   const rules = {
-    username: {
+    displayName: {
       presence: true,
       length: { minimum: 3, maximum: 30 },
-      format: {
-        pattern: '[a-z0-9]+',
-        flags: 'i',
-        message: 'can only contain alphabet and numeric characters',
-      },
     },
     email: {
       presence: true,
       email: true,
     },
-    password(value, attributes, attributeName, options, constraints) {
+    password: (value) => {
       // only validate when value is not empty
       return value ? {
         length: { minimum: 6, maximum: 30 },
       } : false;
     },
-    currentPassword(value, attributes, attributeName, options, constraints) {
+    currentPassword: (value, attributes) => {
       // only validate when password is not empty
       return attributes.password ? {
         presence: true,
@@ -139,17 +135,19 @@ async function validateResetPwdData(data) {
 
 // send email to check containe link to reset password
 function sendMailRequestResetPwd(user) {
+  const { appName, mail: { autoEmail } } = config;
   const q = querystring.stringify({
     token: user.createToken('10m').value,
   });
-  const link = `${config.webUrl}/admin/forgot-password?${q}`;
+  const link = `${config.webUrl}/reset-password?${q}`;
+
   const message = {
-    from: `${config.appName} <${config.mail.autoEmail}>`,
+    from: `${appName} <${autoEmail}>`,
     to: `${user.email} <${user.email}>`,
-    subject: 'Password reset request',
-    templatePath: path.resolve(__dirname, 'email/reset-password.html'),
+    subject: `${appName} - Password reset request`,
+    templatePath: path.resolve(__dirname, 'email/reset-password.pug'),
     params: {
-      name: user.email,
+      appName: config.appName,
       link,
     },
   };

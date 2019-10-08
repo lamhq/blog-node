@@ -17,7 +17,7 @@ router.post('/admin/login', login);
 router.post('/admin/register', register);
 
 // send reset password link to email
-router.post('/admin/reset-password', requestResetPassword);
+router.post('/admin/forgot-password', requestResetPassword);
 
 // update account's password
 router.put('/admin/account/password', resetPassword);

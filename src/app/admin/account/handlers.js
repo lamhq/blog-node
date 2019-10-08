@@ -14,6 +14,9 @@ const {
   sendMailRequestResetPwd,
 } = require('./helpers');
 
+const verifyUserToken = createMiddleware('jwtAdmin',
+  (jwtPayload) => User.findById(jwtPayload.value));
+
 async function login(req, res, next) {
   try {
     const data = req.body;
@@ -53,41 +56,39 @@ async function updateProfile(req, res, next) {
   try {
     const user = await User.findById(req.user.id);
     const data = req.body;
-    if (user) {
-      const errors = validateProfileData(data, user);
-      if (errors) {
-        next(validationExc('Please check your form input', errors));
-      } else {
-        user.email = data.email;
-        user.username = data.username;
-        if (data.password) { user.setPassword(data.password); }
-        const saved = await user.save();
-        res.json({ username: saved.username, email: saved.email });
-      }
-    } else {
-      next(notFoundExc('No profile data found'));
+    if (!user) {
+      throw notFoundExc('No profile data found');
     }
+    const errors = validateProfileData(data, user);
+    if (errors) {
+      throw validationExc('Please check your form input', errors);
+    }
+
+    user.email = data.email;
+    user.displayName = data.displayName;
+    if (data.password) {
+      user.setPassword(data.password);
+    }
+    await user.save();
+    res.json(user);
   } catch (err) {
     next(err);
   }
 }
 
-const verifyUserToken = createMiddleware('jwtAdmin', (jwtPayload) => User.findById(jwtPayload.value));
-
 async function requestResetPassword(req, res, next) {
   try {
     const data = req.body;
     const errors = await validateForgotPwdData(data);
-    console.log(errors);
     if (errors) {
-      return next(validationExc('Please correct your input.', errors));
+      throw validationExc('Please correct your input.', errors);
     }
 
     const user = await User.findOne({
       email: data.email,
     });
+    await sendMailRequestResetPwd(user);
     res.json({ message: 'Please check your email.' });
-    sendMailRequestResetPwd(user);
   } catch (err) {
     next(err);
   }
