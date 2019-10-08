@@ -4,9 +4,9 @@ const { sendTestMail } = require('./mail');
 // get upload params to support uploading file on front end
 async function getUploadParams(req, res, next) {
   try {
-    return res.json(s3.getUploadParams());
+    res.json(s3.getUploadParams());
   } catch (err) {
-    return next(err);
+    next(err);
   }
 }
 

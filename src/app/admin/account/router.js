@@ -11,13 +11,13 @@ const {
 const router = express.Router();
 
 // user login
-router.post('/admin/login', login);
+router.post('/admin/account/login', login);
 
 // user register
-router.post('/admin/register', register);
+router.post('/admin/account/register', register);
 
 // send reset password link to email
-router.post('/admin/forgot-password', requestResetPassword);
+router.post('/admin/account/forgot-password', requestResetPassword);
 
 // update account's password
 router.put('/admin/account/password', resetPassword);

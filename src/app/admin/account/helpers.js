@@ -5,7 +5,7 @@ const path = require('path');
 const User = require('../../models/user');
 const config = require('../../../../config');
 const { sendMail } = require('../../../common/mail');
-const { verifyToken } = require('../../../common/helpers');
+const { decryptToken } = require('../../../common/helpers');
 
 function validateLoginData(data) {
   const rules = {
@@ -93,11 +93,11 @@ async function validateForgotPwdData(data) {
 
 // validate.js custom async validate function to validate user is valid or not
 async function validateUserToken(value) {
-  const decoded = verifyToken(value);
+  const decoded = decryptToken(value);
   if (!decoded) return Promise.resolve('invalid');
 
   const user = await User.findOne({
-    _id: decoded.userId,
+    _id: decoded.value,
     status: User.STATUS_ACTIVE,
   });
   return user
@@ -117,10 +117,6 @@ async function validateResetPwdData(data) {
     password: {
       presence: { allowEmpty: false },
       length: { minimum: 6, maximum: 30 },
-    },
-    verify: {
-      presence: { allowEmpty: false },
-      equality: 'password',
     },
   };
 
@@ -170,19 +166,14 @@ async function validateRegistrationData(data) {
 
   let errors;
   const constraints = {
-    username: {
+    displayName: {
       presence: { allowEmpty: false },
       length: { minimum: 3, maximum: 30 },
-      format: {
-        pattern: '[a-z0-9]+',
-        flags: 'i',
-        message: 'can only contain alphabet and numeric characters',
-      },
-      emailNotExists: true,
     },
     email: {
       presence: { allowEmpty: false },
       email: true,
+      emailNotExists: true,
     },
   };
 
@@ -194,29 +185,6 @@ async function validateRegistrationData(data) {
   return errors;
 }
 
-function sendMailRegistrationToUser(user) {
-  const q = querystring.stringify({
-    token: user.createToken('10m').value,
-  });
-  const link = `${config.webUrl}/admin/forgot-password?${q}`;
-  const message = {
-    from: `${config.appName} <${config.mail.autoEmail}>`,
-    to: `${user.email} <${user.email}>`,
-    subject: 'Password reset request',
-    templatePath: path.resolve(__dirname, 'email/reset-password.html'),
-    params: {
-      name: user.email,
-      link,
-    },
-  };
-
-  return sendMail(message);
-}
-
-function sendMailRegistrationToAdmin(user) {
-
-}
-
 module.exports = {
   validateLoginData,
   validateProfileData,
@@ -224,6 +192,4 @@ module.exports = {
   sendMailRequestResetPwd,
   validateResetPwdData,
   validateRegistrationData,
-  sendMailRegistrationToUser,
-  sendMailRegistrationToAdmin,
 };

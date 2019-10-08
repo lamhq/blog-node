@@ -3,7 +3,7 @@ const User = require('../../models/user');
 const {
   validationExc,
   notFoundExc,
-  verifyToken,
+  decryptToken,
 } = require('../../../common/helpers');
 const {
   validateLoginData,
@@ -98,14 +98,13 @@ async function resetPassword(req, res, next) {
   try {
     const data = req.body;
     const errors = await validateResetPwdData(data);
-    console.log(errors);
     if (errors) {
-      return next(validationExc('Please correct your input.', errors));
+      throw validationExc('Please correct your input.', errors);
     }
 
-    const decoded = verifyToken(data.token);
+    const decoded = decryptToken(data.token);
     const user = await User.findOne({
-      id: decoded.userId,
+      _id: decoded.value,
       status: User.STATUS_ACTIVE,
     });
     user.setPassword(data.password);
@@ -123,7 +122,7 @@ async function register(req, res, next) {
     const data = req.body;
     const errors = await validateRegistrationData(data);
     if (errors) {
-      return next(validationExc('Please correct your input.', errors));
+      throw validationExc('Please correct your input.', errors);
     }
 
     const user = new User({
@@ -131,13 +130,9 @@ async function register(req, res, next) {
       status: User.STATUS_ACTIVE,
     });
     await user.save();
-    // sendMailRegistrationToUser(user);
-    // sendMailRegistrationToAdmin(user);
-
-    const { __v, password, ...safeData } = user.toObject();
-    return res.json(safeData);
+    res.json(user);
   } catch (err) {
-    return next(err);
+    next(err);
   }
 }
 
