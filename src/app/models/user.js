@@ -44,6 +44,16 @@ class ModelClass {
     const data = decryptToken(value);
     return data && data.value === this.id;
   }
+
+  toResponse() {
+    const {
+      password,
+      __v,
+      _id,
+      ...data
+    } = this.toObject();
+    return { id: this.id, ...data };
+  }
 }
 
 schema.loadClass(ModelClass);
@@ -51,8 +61,7 @@ schema.loadClass(ModelClass);
 const User = mongoose.model('User', schema);
 
 // available user roles
-User.ROLE_ADMIN = 'Admin';
-User.ROLE_CUSTOMER = 'Customer';
+User.ROLE_ADMIN = 'ADMIN';
 
 // available user statuses
 User.STATUS_PENDING = 'Pending';

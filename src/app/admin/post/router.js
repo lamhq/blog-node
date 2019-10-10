@@ -10,11 +10,11 @@ const {
 
 const router = express.Router();
 
-router.route('/posts')
+router.route('/admin/posts')
   .get([verifyUserToken, getPosts])
   .post([verifyUserToken, addPost]);
 
-router.route('/posts/:id')
+router.route('/admin/posts/:id')
   .get([verifyUserToken, getPost])
   .put([verifyUserToken, updatePost])
   .delete([verifyUserToken, deletePost]);

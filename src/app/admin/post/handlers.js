@@ -1,6 +1,6 @@
-const Post = require('../../models/post')
-const { validationExc, notFoundExc } = require('../../../common/helpers')
-const { validatePost, getQueryData } = require('./helpers')
+const Post = require('../../models/post');
+const { validationExc, notFoundExc } = require('../../../common/helpers');
+const { validatePostData, getQueryData } = require('./helpers');
 
 async function getPosts(req, res, next) {
   try {
@@ -13,10 +13,8 @@ async function getPosts(req, res, next) {
 
     res
       .set('X-Pagination-Page-Count', Math.ceil(total / query.limit))
-      .set('X-Pagination-Current-Page', query.page)
-      .set('X-Pagination-Per-Page', query.limit)
-      .set('X-Pagination-Total-Count', total)
-      .json(items);
+      .set('X-Pagination-Total', total)
+      .json(items.map((item) => item.toResponse()));
   } catch (err) {
     next(err);
   }
@@ -24,61 +22,63 @@ async function getPosts(req, res, next) {
 
 async function addPost(req, res, next) {
   try {
-    var { _id, _v, ...data } = req.body
-    var errors = validatePost(data)
+    const data = req.body;
+    const errors = validatePostData(data);
     if (errors) {
-      return next(validationExc('Invalid post data', errors))
+      throw validationExc('Invalid post data', errors);
     }
 
-    var post = new Post(data)
-    await post.save()
-    return res.json(post)
+    const post = new Post();
+    post.title = data.title;
+    post.content = data.content;
+    await post.save();
+    res.json(post.toResponse());
   } catch (err) {
-    next(err)
+    next(err);
   }
 }
 
 async function getPost(req, res, next) {
   try {
-    var post = await Post.findById(req.params.id)
-    return post ? res.json(post) : next(notFoundExc('No data found'))
+    const post = await Post.findById(req.params.id);
+    if (!post) {
+      throw notFoundExc('No data found');
+    }
+    res.json(post.toResponse());
   } catch (err) {
-    next(err)
+    next(err);
   }
 }
 
 async function updatePost(req, res, next) {
   try {
-    var post = await Post.findById(req.params.id)
+    const post = await Post.findById(req.params.id);
     if (!post) {
-      return next(notFoundExc('No data found'))
+      throw notFoundExc('No data found');
     }
 
-    var { _id, _v, ...data } = req.body
-    var errors = validatePost(data)
+    const data = req.body;
+    const errors = validatePostData(data);
     if (errors) {
-      return next(validationExc('Invalid post data', errors))
+      throw validationExc('Invalid post data', errors);
     }
 
-    post.set(data)
-    post.updatedAt = new Date()
-    var saved = await post.save()
-    return res.json(saved)
+    post.title = data.title;
+    post.content = data.content;
+    post.updatedAt = new Date();
+    await post.save();
+    res.json(post.toResponse());
   } catch (err) {
-    next(err)
+    next(err);
   }
 }
 
 async function deletePost(req, res, next) {
   try {
-    var post = await Post.findByIdAndRemove(req.params.id)
-    if (!post) {
-      return next(notFoundExc('No data found'))
-    }
-
-    res.json(post)
+    await Post.deleteOne({ _id: req.params.id });
+    res.json(true);
   } catch (err) {
-    next(err)
+    next(err);
   }
 }
 
@@ -88,4 +88,4 @@ module.exports = {
   getPost,
   updatePost,
   deletePost,
-}
+};

@@ -1,6 +1,6 @@
 const validate = require('validate.js');
 
-function validatePost(data) {
+function validatePostData(data) {
   const rules = {
     title: {
       presence: { message: '^Email can\'t be blank', allowEmpty: false },
@@ -13,9 +13,12 @@ function validatePost(data) {
   return validate(data, rules);
 }
 
-function getQueryData({ q, limit = 4, page = 1 }) {
+/**
+ * Convert http query string to mongodb query object
+ */
+function getQueryData({ q, limit = 10, offset = 0 }) {
   const limit2 = parseInt(limit, 10);
-  const page2 = parseInt(page, 10);
+  const offset2 = parseInt(offset, 10);
   const conditions = {};
 
   // apply text search
@@ -24,17 +27,14 @@ function getQueryData({ q, limit = 4, page = 1 }) {
     conditions.content = new RegExp(q, 'i');
   }
 
-  // calculate offset
-  const offset = (page2 - 1) * limit2;
   return {
     conditions,
     limit: limit2,
-    page,
-    offset,
+    offset: offset2,
   };
 }
 
 module.exports = {
-  validatePost,
+  validatePostData,
   getQueryData,
 };

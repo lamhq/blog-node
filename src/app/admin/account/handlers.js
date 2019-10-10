@@ -14,6 +14,7 @@ const {
   sendMailRequestResetPwd,
 } = require('./helpers');
 
+// check user is admin
 const verifyUserToken = createMiddleware('jwtAdmin',
   (jwtPayload) => User.findById(jwtPayload.value));
 
@@ -33,7 +34,7 @@ async function login(req, res, next) {
 
     res.json({
       token: user.createToken(data.remember ? '30 days' : '3h'),
-      user,
+      user: user.toResponse(),
     });
   } catch (err) {
     next(err);
@@ -46,7 +47,7 @@ async function getProfile(req, res, next) {
     if (!user) {
       throw notFoundExc('No profile data found');
     }
-    res.json(user);
+    res.json(user.toResponse());
   } catch (err) {
     next(err);
   }
@@ -70,7 +71,7 @@ async function updateProfile(req, res, next) {
       user.setPassword(data.password);
     }
     await user.save();
-    res.json(user);
+    res.json(user.toResponse());
   } catch (err) {
     next(err);
   }
@@ -130,7 +131,7 @@ async function register(req, res, next) {
       status: User.STATUS_ACTIVE,
     });
     await user.save();
-    res.json(user);
+    res.json(user.toResponse());
   } catch (err) {
     next(err);
   }
