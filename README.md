@@ -1,28 +1,37 @@
-# React Blog API server
+# RESTful API Server
 
 ## Introduction
 
-Api server of React Blog project
+Boilerplate source code for a RESTful API Server using ExpressJs
 
-## Requirements
+## Required softwares
 
-- [Yarn](https://yarnpkg.com/) package + [Node.js](https://nodejs.org/) v8.9 or
-  newer
-- MongoDB 3.6.1 or
-  newer
+- [Node.js](https://nodejs.org/) v10.16.0 or higher
+- MongoDB 4.0.0 or higher
+- [Yarn](https://yarnpkg.com/)
+- [Visual Studio Code](https://code.visualstudio.com/) + [ESLint extension](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
+- Postman + [Sample API Collection](https://www.getpostman.com/collections/63427fe223e1665557dc)
+
+## Required knowledges
+
+Read these documents before coding:
+
+- [Git-Flow](https://danielkummer.github.io/git-flow-cheatsheet/index.html)
+- [Mongoose](https://mongoosejs.com/docs/guide.html)
+- [ExpressJs](https://expressjs.com/)
+- [Validate.js](https://validatejs.org/)
 
 ## Setup
 
 ### 1. Installing dependencies
 
 ``` bash
-yarn global add nodemon
 yarn install
 ```
 
 ### 2. Setting environment variables
 
-Rename the file `.env.example` to `.env`. Open the edited file and change values here to fit your development environment.
+Copy `.env.example` to `.env`. Open the edited file and change values to fit your development environment.
 
 ### 3. Import test data to database
 
@@ -65,15 +74,3 @@ yarn start
 ├── README.md                   # contains installation instruction
 ├── package.json                # contains 3rd party libraries and utilities
 ```
-
-## Run Test
-
-All test are written in `/test` directory. To run the test, use this command:
-
-```
-yarn run test
-```
-
-## How should i write code?
-
-Please refer to [Code Standard](https://the-app-team.atlassian.net/wiki/spaces/CI/pages/33521966/Code+Standards) documentation here.
