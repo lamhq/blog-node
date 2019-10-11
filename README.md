@@ -4,6 +4,7 @@
 
 Boilerplate source code for a RESTful API Server using ExpressJs
 
+
 ## Required softwares
 
 - [Node.js](https://nodejs.org/) v10.16.0 or higher
@@ -11,6 +12,7 @@ Boilerplate source code for a RESTful API Server using ExpressJs
 - [Yarn](https://yarnpkg.com/)
 - [Visual Studio Code](https://code.visualstudio.com/) + [ESLint extension](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
 - Postman + [Sample API Collection](https://www.getpostman.com/collections/63427fe223e1665557dc)
+
 
 ## Required knowledges
 
@@ -21,6 +23,7 @@ Read these documents before coding:
 - [ExpressJs](https://expressjs.com/)
 - [Validate.js](https://validatejs.org/)
 
+
 ## Setup
 
 ### 1. Installing dependencies
@@ -29,9 +32,11 @@ Read these documents before coding:
 yarn install
 ```
 
+
 ### 2. Setting environment variables
 
 Copy `.env.example` to `.env`. Open the edited file and change values to fit your development environment.
+
 
 ### 3. Import test data to database
 
@@ -40,11 +45,23 @@ cd data/
 sh import.sh
 ```
 
+
 ### 4. Run the app
 
 ``` bash
 yarn start
 ```
+
+
+### 5. Install git-flow
+
+This source code use git-flow for managing branches. Be sure to checkout [git-flow documentation](https://danielkummer.github.io/git-flow-cheatsheet/index.html) to install git-flow first.
+
+
+### 6. Start coding
+
+First, checkout `develop` branch, then you can start developing new feature by running git-flow command `git flow feature start MYFEATURE`
+
 
 ## Directory Layout
 
