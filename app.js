@@ -44,7 +44,7 @@ app.use((err, req, res, next) => {
       logger.error(err);
       error = {
         status: 500,
-        code: 'server_error',
+        code: 'server-error',
         title: 'Unknown error occured',
       };
     }

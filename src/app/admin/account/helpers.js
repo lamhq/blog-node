@@ -10,10 +10,15 @@ const { decryptToken } = require('../../../common/helpers');
 function validateLoginData(data) {
   const rules = {
     email: {
-      presence: { message: '^Username can\'t be blank' },
+      presence: {
+        allowEmpty: false,
+        message: '^Username can\'t be blank',
+      },
     },
     password: {
-      presence: true,
+      presence: {
+        allowEmpty: false,
+      },
     },
   };
   return validate(data, rules, { format: 'grouped' });
