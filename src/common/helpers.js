@@ -9,17 +9,17 @@ const logger = require('./log');
 const config = require('../../config');
 
 /**
- * Return api error data for internal server error
+ * Return error object
  *
- * @param {String} message
- * @param {Object} options
+ * @param {String} code
+ * @param {String} title
+ * @param {Object} status
  */
-function serverExc(message, options = {}) {
+function createError(code, message, status = 500) {
   return {
-    status: 500,
-    code: 'server_error',
-    message,
-    ...options,
+    code,
+    title: message,
+    status,
   };
 }
 
@@ -29,12 +29,11 @@ function serverExc(message, options = {}) {
  * @param {String} message
  * @param {Object} options
  */
-function notFoundExc(message, options = {}) {
+function notFoundError(message) {
   return {
+    code: 'resource-not-found',
+    title: message,
     status: 404,
-    code: 'resource_not_found',
-    message,
-    ...options,
   };
 }
 
@@ -44,12 +43,12 @@ function notFoundExc(message, options = {}) {
  * @param {String} message
  * @param {Object} errors object contain field errors
  */
-function validationExc(message, errors, code = null) {
+function userInputError(errors) {
   return {
+    code: 'invalid-user-input',
+    title: 'Invalid input',
     status: 400,
-    code: code || 'invalid_data',
-    message,
-    errors,
+    detail: errors,
   };
 }
 
@@ -58,11 +57,11 @@ function validationExc(message, errors, code = null) {
  *
  * @param {String} message
  */
-function unauthorizedExc(message) {
+function unauthorizedError(message) {
   return {
-    status: 401,
     code: 'unauthorized',
-    message,
+    title: message,
+    status: 401,
   };
 }
 
@@ -222,10 +221,10 @@ module.exports = {
   round,
   buildQuery,
   escapeRegExp,
-  notFoundExc,
-  validationExc,
-  serverExc,
-  unauthorizedExc,
+  notFoundError,
+  userInputError,
+  createError,
+  unauthorizedError,
   randomCode,
   getDatePart,
   getTimeDiff,

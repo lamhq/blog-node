@@ -1,9 +1,10 @@
 const createMiddleware = require('../../../common/jwt');
 const User = require('../../models/user');
 const {
-  validationExc,
-  notFoundExc,
+  userInputError,
+  notFoundError,
   decryptToken,
+  createError,
 } = require('../../../common/helpers');
 const {
   validateLoginData,
@@ -23,13 +24,20 @@ async function login(req, res, next) {
     const data = req.body;
     const errors = validateLoginData(data);
     if (errors) {
-      throw validationExc('Please correct your input.', errors);
+      throw userInputError(errors);
     }
 
-    const user = await User.findOne({ email: data.loginId });
-    if (!user || !user.isPasswordValid(data.password)) {
-      throw validationExc('Invalid login information.',
-        { password: ['Incorrect username or password'] });
+    const user = await User.findOne({ email: data.email });
+    if (!user) {
+      throw createError('user-not-found', 'There is no user with this email.', 404);
+    }
+
+    if (!user.isPasswordValid(data.password)) {
+      throw createError('invalid-password', 'Invalid password.', 400);
+    }
+
+    if (user.status !== User.STATUS_ACTIVE) {
+      throw createError('user-is-disabled', 'User is disabled.', 400);
     }
 
     res.json({
@@ -45,7 +53,7 @@ async function getProfile(req, res, next) {
   try {
     const user = await User.findById(req.user.id);
     if (!user) {
-      throw notFoundExc('No profile data found');
+      throw notFoundError('No profile data found');
     }
     res.json(user.toResponse());
   } catch (err) {
@@ -58,11 +66,11 @@ async function updateProfile(req, res, next) {
     const user = await User.findById(req.user.id);
     const data = req.body;
     if (!user) {
-      throw notFoundExc('No profile data found');
+      throw notFoundError('No profile data found');
     }
     const errors = validateProfileData(data, user);
     if (errors) {
-      throw validationExc('Please check your form input', errors);
+      throw userInputError(errors);
     }
 
     user.email = data.email;
@@ -82,7 +90,7 @@ async function requestResetPassword(req, res, next) {
     const data = req.body;
     const errors = await validateForgotPwdData(data);
     if (errors) {
-      throw validationExc('Please correct your input.', errors);
+      throw userInputError(errors);
     }
 
     const user = await User.findOne({
@@ -100,7 +108,7 @@ async function resetPassword(req, res, next) {
     const data = req.body;
     const errors = await validateResetPwdData(data);
     if (errors) {
-      throw validationExc('Please correct your input.', errors);
+      throw userInputError(errors);
     }
 
     const decoded = decryptToken(data.token);
@@ -123,7 +131,7 @@ async function register(req, res, next) {
     const data = req.body;
     const errors = await validateRegistrationData(data);
     if (errors) {
-      throw validationExc('Please correct your input.', errors);
+      throw userInputError(errors);
     }
 
     const user = new User({

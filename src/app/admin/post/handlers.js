@@ -1,5 +1,5 @@
 const Post = require('../../models/post');
-const { validationExc, notFoundExc } = require('../../../common/helpers');
+const { userInputError, notFoundError } = require('../../../common/helpers');
 const { validatePostData, getQueryData } = require('./helpers');
 
 async function getPosts(req, res, next) {
@@ -25,7 +25,7 @@ async function addPost(req, res, next) {
     const data = req.body;
     const errors = validatePostData(data);
     if (errors) {
-      throw validationExc('Invalid post data', errors);
+      throw userInputError(errors);
     }
 
     const post = new Post();
@@ -42,7 +42,7 @@ async function getPost(req, res, next) {
   try {
     const post = await Post.findById(req.params.id);
     if (!post) {
-      throw notFoundExc('No data found');
+      throw notFoundError('No data found');
     }
     res.json(post.toResponse());
   } catch (err) {
@@ -54,13 +54,13 @@ async function updatePost(req, res, next) {
   try {
     const post = await Post.findById(req.params.id);
     if (!post) {
-      throw notFoundExc('No data found');
+      throw notFoundError('No data found');
     }
 
     const data = req.body;
     const errors = validatePostData(data);
     if (errors) {
-      throw validationExc('Invalid post data', errors);
+      throw userInputError(errors);
     }
 
     post.title = data.title;

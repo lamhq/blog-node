@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const logger = require('./src/common/log');
 const sentry = require('./src/common/sentry');
-const { notFoundExc } = require('./src/common/helpers');
+const { notFoundError } = require('./src/common/helpers');
 const router = require('./router');
 
 const app = express();
@@ -24,24 +24,35 @@ app.use(morgan('tiny', {
 app.use(router);
 
 // catch 404 and forward to error handler
-app.use((req, res, next) => next(notFoundExc('No route found')));
+app.use((req, res, next) => next(notFoundError('No route found')));
 
 sentry.addErrorHandler(app);
 
 // error handler
 app.use((err, req, res, next) => {
-  // errors thrown by app
-  if (err.status) {
-    const { status, ...data } = err;
-    res.status(status).json(data);
+  let resp = [];
+  // multiple errors thrown in app
+  if (Array.isArray(err)) {
+    resp = err;
   } else {
-    // uncaught exception
-    logger.error(err);
-    res.status(500).json({
-      code: 'server_error',
-      message: err.message,
-    });
+    let error = {};
+    // single error thrown in app
+    if (err.status) {
+      error = err;
+    } else {
+      // uncaught exception
+      logger.error(err);
+      error = {
+        status: 500,
+        code: 'server_error',
+        title: 'Unknown error occured',
+      };
+    }
+    resp.push(error);
   }
+
+  // return an array of errors
+  res.status(resp[0].status).json(resp);
 });
 
 module.exports = app;

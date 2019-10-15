@@ -9,7 +9,7 @@ const { decryptToken } = require('../../../common/helpers');
 
 function validateLoginData(data) {
   const rules = {
-    loginId: {
+    email: {
       presence: { message: '^Username can\'t be blank' },
     },
     password: {
