@@ -138,9 +138,9 @@ async function validateResetPwdData(data) {
 function sendMailRequestResetPwd(user) {
   const { appName, mail: { autoEmail } } = config;
   const q = querystring.stringify({
-    token: user.createToken('10m').value,
+    token: user.createToken('1h').value,
   });
-  const link = `${config.webUrl}/reset-password?${q}`;
+  const link = `${config.webUrl}/admin/reset-password?${q}`;
 
   const message = {
     from: `${appName} <${autoEmail}>`,
