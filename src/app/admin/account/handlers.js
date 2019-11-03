@@ -73,10 +73,9 @@ async function updateProfile(req, res, next) {
       throw userInputError(errors);
     }
 
-    user.email = data.email;
     user.displayName = data.displayName;
-    if (data.password) {
-      user.setPassword(data.password);
+    if (data.newPassword) {
+      user.setPassword(data.newPassword);
     }
     await user.save();
     res.json(user.toResponse());

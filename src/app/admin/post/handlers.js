@@ -10,11 +10,14 @@ async function getPosts(req, res, next) {
       .sort({ updatedAt: -1 })
       .skip(query.offset)
       .limit(query.limit);
-
-    res
-      .set('X-Pagination-Page-Count', Math.ceil(total / query.limit))
-      .set('X-Pagination-Total', total)
-      .json(items.map((item) => item.toResponse()));
+    const resp = {
+      meta: {
+        total,
+        totalPages: Math.ceil(total / query.limit),
+      },
+      data: items.map((item) => item.toResponse()),
+    };
+    res.json(resp);
   } catch (err) {
     next(err);
   }

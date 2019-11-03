@@ -43,11 +43,7 @@ function validateProfileData(data, user) {
       presence: true,
       length: { minimum: 3, maximum: 30 },
     },
-    email: {
-      presence: true,
-      email: true,
-    },
-    password: (value) => {
+    newPassword: (value) => {
       // only validate when value is not empty
       return value ? {
         length: { minimum: 6, maximum: 30 },
@@ -55,7 +51,7 @@ function validateProfileData(data, user) {
     },
     currentPassword: (value, attributes) => {
       // only validate when password is not empty
-      return attributes.password ? {
+      return attributes.newPassword ? {
         presence: true,
         checkPassword: true,
       } : false;

@@ -69,7 +69,6 @@ First, checkout `develop` branch, then you can start developing new feature by r
 .
 ├── /.vscode/                   # contain workspace visual studio code setting
 ├── /data/                      # contains sample data and import/export scripts
-├── /logs/                      # contains application's log files
 ├── /modules/                   # list of application's modules
 │   ├── /common/                # reusable code for all projects
 │   └── /app/                   # code specific for this project

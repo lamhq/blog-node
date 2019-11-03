@@ -2,21 +2,16 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const logger = require('./src/common/log');
-const sentry = require('./src/common/sentry');
 const { notFoundError } = require('./src/common/helpers');
 const router = require('./router');
 
 const app = express();
 
-// integrate sentry with raven-node
-sentry.install();
-sentry.addRequestHandler(app);
-
 // enable parsing request boby with different content types
 app.use(bodyParser.json());
 
 // log http request to console
-app.use(morgan('tiny', {
+app.use(morgan('dev', {
   stream: logger.stream,
 }));
 
@@ -25,8 +20,6 @@ app.use(router);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => next(notFoundError('No route found')));
-
-sentry.addErrorHandler(app);
 
 // error handler
 app.use((err, req, res, next) => {
@@ -40,8 +33,20 @@ app.use((err, req, res, next) => {
     if (err.status) {
       error = err;
     } else {
-      // uncaught exception
-      logger.error(err);
+      // uncaught exception, og error
+      logger.error(err.message, {
+        request: {
+          url: req.originalUrl,
+          method: req.method,
+          body: req.body,
+          headers: req.headers,
+          ip: req.ip,
+        },
+        error: {
+          stack: err.stack,
+          message: err.message,
+        },
+      });
       error = {
         status: 500,
         code: 'server-error',
