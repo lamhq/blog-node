@@ -1,5 +1,5 @@
 # Use an official Node runtime as a parent image
-FROM node:8.9-alpine
+FROM node:13.1.0-alpine
 
 # Environment variables for database
 ENV DB_NAME ci_dev
