@@ -1,10 +1,12 @@
 pipeline {
-    agent { docker { image 'node:13-alpine' } }
+    agent any
     stages {
         stage('Test') {
+            agent {
+                docker { image 'node:13-alpine' }
+            }
             steps {
-                sh 'yarn'
-                sh 'yarn test'
+                sh 'jenkins/test.sh'
             }
         }
     }
