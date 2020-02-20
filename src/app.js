@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const { stream: logStream, logError } = require('./common/log');
-const { notFoundError } = require('./common/helpers');
+const { notFoundError } = require('./common/utils');
 const router = require('./router');
 
 const app = express();

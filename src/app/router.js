@@ -1,12 +1,12 @@
 const express = require('express');
-const handlers = require('./handlers');
+const middlewares = require('./middlewares');
 
 const router = express.Router();
 
 // refresh token
 router.post('/tokens', [
-  handlers.verifyUserToken,
-  handlers.refreshToken,
+  middlewares.verifyUserToken,
+  middlewares.refreshToken,
 ]);
 
 module.exports = router;

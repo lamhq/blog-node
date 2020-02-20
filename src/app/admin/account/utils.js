@@ -5,7 +5,7 @@ const path = require('path');
 const User = require('../../models/user');
 const config = require('../../../config');
 const { sendMail } = require('../../../common/mail');
-const { decryptToken } = require('../../../common/helpers');
+const { decryptToken } = require('../../../common/utils');
 
 function validateLoginData(data) {
   const rules = {

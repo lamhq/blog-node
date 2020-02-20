@@ -6,7 +6,7 @@ const {
   resetPassword,
   verifyUserToken,
   getProfile, updateProfile,
-} = require('./handlers');
+} = require('./middlewares');
 
 const router = express.Router();
 

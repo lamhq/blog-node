@@ -3,7 +3,7 @@ const http = require('http');
 const app = require('./app');
 const { port } = require('./config');
 const { logInfo, logError } = require('./common/log');
-const { connectToDb } = require('./common/helpers');
+const { connectToDb } = require('./common/utils');
 
 const server = http.createServer(app);
 

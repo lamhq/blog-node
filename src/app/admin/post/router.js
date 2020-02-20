@@ -1,12 +1,12 @@
 const express = require('express');
-const { verifyUserToken } = require('../account/handlers');
+const { verifyUserToken } = require('../account/middlewares');
 const {
   getPosts,
   addPost,
   getPost,
   updatePost,
   deletePost,
-} = require('./handlers');
+} = require('./middlewares');
 
 const router = express.Router();
 

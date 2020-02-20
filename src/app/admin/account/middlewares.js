@@ -5,7 +5,7 @@ const {
   notFoundError,
   decryptToken,
   createError,
-} = require('../../../common/helpers');
+} = require('../../../common/utils');
 const {
   validateLoginData,
   validateRegistrationData,
@@ -13,7 +13,7 @@ const {
   validateForgotPwdData,
   validateResetPwdData,
   sendMailRequestResetPwd,
-} = require('./helpers');
+} = require('./utils');
 
 // check user is admin
 const verifyUserToken = createMiddleware('jwtAdmin',

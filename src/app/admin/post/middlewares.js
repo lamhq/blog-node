@@ -1,6 +1,6 @@
 const Post = require('../../models/post');
-const { userInputError, notFoundError } = require('../../../common/helpers');
-const { validatePostData, getQueryData } = require('./helpers');
+const { userInputError, notFoundError } = require('../../../common/utils');
+const { validatePostData, getQueryData } = require('./utils');
 
 async function getPosts(req, res, next) {
   try {

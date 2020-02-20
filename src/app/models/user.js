@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt-nodejs');
-const { createToken, decryptToken } = require('../../common/helpers');
+const { createToken, decryptToken } = require('../../common/utils');
 
 const schema = mongoose.Schema({
   email: { type: String, required: true, unique: true },
