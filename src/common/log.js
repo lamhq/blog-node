@@ -26,10 +26,15 @@ const logger = winston.createLogger({
 });
 
 // use for logging http request with morgan
-logger.stream = {
+const stream = {
   write(message) {
     logger.info(message);
   },
 };
 
-module.exports = logger;
+module.exports = {
+  stream,
+  logInfo: logger.info,
+  logError: logger.error,
+  logWarning: logger.warn,
+};

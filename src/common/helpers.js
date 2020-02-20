@@ -6,7 +6,7 @@ const moment = require('moment');
 const querystring = require('querystring');
 
 const logger = require('./log');
-const config = require('../../config');
+const config = require('../config');
 
 /**
  * Return error object

@@ -1,5 +1,5 @@
 const cryptoJs = require('crypto-js');
-const { awsConfig } = require('../../config');
+const { awsConfig } = require('../config');
 
 const defOptions = {
   accessKeyId: awsConfig.accessKeyId,

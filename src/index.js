@@ -2,8 +2,8 @@ require('dotenv').config();
 const http = require('http');
 const app = require('./app');
 const { port } = require('./config');
-const log = require('./src/common/log');
-const { connectToDb } = require('./src/common/helpers');
+const { logInfo, logError } = require('./common/log');
+const { connectToDb } = require('./common/helpers');
 
 const server = http.createServer(app);
 
@@ -21,12 +21,12 @@ function onError(error) {
   // handle specific listen errors with friendly messages
   switch (error.code) {
     case 'EACCES':
-      log.error(`${bind} requires elevated privileges`);
+      logError(`${bind} requires elevated privileges`);
       process.exit(1);
       break;
 
     case 'EADDRINUSE':
-      log.error(`${bind} is already in use`);
+      logError(`${bind} is already in use`);
       process.exit(1);
       break;
 
@@ -42,7 +42,7 @@ function onListening() {
   const addr = server.address();
   const bind = typeof addr === 'string'
     ? `pipe ${addr}` : `port ${addr.port}`;
-  log.info(`Web server listening on ${bind}`);
+  logInfo(`Web server listening on ${bind}`);
 }
 
 /**
@@ -51,11 +51,12 @@ function onListening() {
 async function run() {
   try {
     await connectToDb();
+    logInfo('Connected to database.');
     server.listen(port);
     server.on('error', onError);
     server.on('listening', onListening);
   } catch (error) {
-    log.error(error);
+    logError(error);
     process.exit(1);
   }
 }

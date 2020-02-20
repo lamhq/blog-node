@@ -3,7 +3,7 @@ const passportJWT = require('passport-jwt');
 
 const JwtStrategy = passportJWT.Strategy;
 const { ExtractJwt } = passportJWT;
-const { appSecret } = require('../../config');
+const { appSecret } = require('../config');
 
 // functions that accepts a request object as an argument
 // and returns the encoded JWT string or null

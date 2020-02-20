@@ -3,7 +3,7 @@ const validate = require('validate.js');
 const querystring = require('querystring');
 const path = require('path');
 const User = require('../../models/user');
-const config = require('../../../../config');
+const config = require('../../../config');
 const { sendMail } = require('../../../common/mail');
 const { decryptToken } = require('../../../common/helpers');
 

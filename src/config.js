@@ -1,11 +1,9 @@
 const config = {
-  appName: 'React Blog',
+  appName: 'Rest Boilerplate',
   appSecret: 'react blog secret',
-  basePath: __dirname,
   port: process.env.PORT || 3000,
   accessTokenLifeTime: '3h',
   webUrl: process.env.WEB_URL,
-  sentryDns: process.env.SENTRY_DNS || false,
   db: {
     uri: process.env.DB_URI,
     debug: process.env.MONGOOSE_DEBUG === 'true',

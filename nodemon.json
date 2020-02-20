@@ -1,5 +1,8 @@
 {
-  "watch": [".", ".env"],
+  "watch": [
+    "src",
+    ".env"
+  ],
   "ignore": [
     ".git",
     "node_modules"

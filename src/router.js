@@ -1,10 +1,10 @@
 const express = require('express');
 
 const router = express.Router();
-const app = require('./src/app/router');
-const common = require('./src/common/router');
-const adminAccount = require('./src/app/admin/account/router');
-const adminPost = require('./src/app/admin/post/router');
+const app = require('./app/router');
+const common = require('./common/router');
+const adminAccount = require('./app/admin/account/router');
+const adminPost = require('./app/admin/post/router');
 
 router.get('/', (req, res) => {
   res.json('api server is working.');

@@ -1,8 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
-const logger = require('./src/common/log');
-const { notFoundError } = require('./src/common/helpers');
+const { stream: logStream, logError } = require('./common/log');
+const { notFoundError } = require('./common/helpers');
 const router = require('./router');
 
 const app = express();
@@ -10,10 +10,8 @@ const app = express();
 // enable parsing request boby with different content types
 app.use(bodyParser.json());
 
-// log http request to console
-app.use(morgan('dev', {
-  stream: logger.stream,
-}));
+// log http request
+app.use(morgan(':remote-addr :method :url :status - :response-time ms', { stream: logStream }));
 
 // application router
 app.use(router);
@@ -34,7 +32,7 @@ app.use((err, req, res, next) => {
       error = err;
     } else {
       // uncaught exception, og error
-      logger.error(err.message, {
+      logError(err.message, {
         request: {
           url: req.originalUrl,
           method: req.method,
