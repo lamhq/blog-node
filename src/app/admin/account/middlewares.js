@@ -1,10 +1,10 @@
 const createMiddleware = require('../../../common/jwt');
 const User = require('../../models/user');
 const {
-  userInputError,
+  formSubmissionError,
   notFoundError,
   decryptToken,
-  createError,
+  clientError,
 } = require('../../../common/utils');
 const {
   validateLoginData,
@@ -24,20 +24,20 @@ async function login(req, res, next) {
     const data = req.body;
     const errors = validateLoginData(data);
     if (errors) {
-      throw userInputError(errors);
+      throw formSubmissionError(errors);
     }
 
     const user = await User.findOne({ email: data.email });
     if (!user) {
-      throw createError('user-not-found', 'There is no user with this email.', 404);
+      throw clientError('There is no user with this email.', 'login/user_not_found');
     }
 
     if (!user.isPasswordValid(data.password)) {
-      throw createError('invalid-password', 'Invalid password.', 400);
+      throw clientError('Invalid password.', 'login/invalid-password');
     }
 
     if (user.status !== User.STATUS_ACTIVE) {
-      throw createError('user-is-disabled', 'User is disabled.', 400);
+      throw clientError('User is disabled.', 'login/user_is_disabled');
     }
 
     res.json({
@@ -70,7 +70,7 @@ async function updateProfile(req, res, next) {
     }
     const errors = validateProfileData(data, user);
     if (errors) {
-      throw userInputError(errors);
+      throw formSubmissionError(errors);
     }
 
     user.displayName = data.displayName;
@@ -89,7 +89,7 @@ async function requestResetPassword(req, res, next) {
     const data = req.body;
     const errors = await validateForgotPwdData(data);
     if (errors) {
-      throw userInputError(errors);
+      throw formSubmissionError(errors);
     }
 
     const user = await User.findOne({
@@ -107,7 +107,7 @@ async function resetPassword(req, res, next) {
     const data = req.body;
     const errors = await validateResetPwdData(data);
     if (errors) {
-      throw userInputError(errors);
+      throw formSubmissionError(errors);
     }
 
     const decoded = decryptToken(data.token);
@@ -130,7 +130,7 @@ async function register(req, res, next) {
     const data = req.body;
     const errors = await validateRegistrationData(data);
     if (errors) {
-      throw userInputError(errors);
+      throw formSubmissionError(errors);
     }
 
     const user = new User({

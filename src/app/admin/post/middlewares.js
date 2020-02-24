@@ -1,5 +1,5 @@
 const Post = require('../../models/post');
-const { userInputError, notFoundError } = require('../../../common/utils');
+const { formSubmissionError, notFoundError } = require('../../../common/utils');
 const { validatePostData, getQueryData } = require('./utils');
 
 async function getPosts(req, res, next) {
@@ -28,7 +28,7 @@ async function addPost(req, res, next) {
     const data = req.body;
     const errors = validatePostData(data);
     if (errors) {
-      throw userInputError(errors);
+      throw formSubmissionError(errors);
     }
 
     const post = new Post();
@@ -63,7 +63,7 @@ async function updatePost(req, res, next) {
     const data = req.body;
     const errors = validatePostData(data);
     if (errors) {
-      throw userInputError(errors);
+      throw formSubmissionError(errors);
     }
 
     post.title = data.title;

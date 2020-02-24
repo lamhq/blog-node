@@ -1,8 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
-const { stream: logStream, logError } = require('./common/log');
-const { notFoundError } = require('./common/utils');
+const { stream: logStream, logError, logInfo } = require('./common/log');
+const { notFoundError, serverError } = require('./common/utils');
 const router = require('./router');
 
 const app = express();
@@ -11,7 +11,9 @@ const app = express();
 app.use(bodyParser.json());
 
 // log http request
-app.use(morgan(':remote-addr :method :url :status - :response-time ms', { stream: logStream }));
+app.use(morgan(':remote-addr :method :url :status - :response-time ms', {
+  stream: logStream,
+}));
 
 // application router
 app.use(router);
@@ -21,41 +23,20 @@ app.use((req, res, next) => next(notFoundError('No route found')));
 
 // error handler
 app.use((err, req, res, next) => {
-  let resp = [];
-  // multiple errors thrown in app
-  if (Array.isArray(err)) {
+  let resp = {};
+  // dedicated error throw in code
+  if (err.status) {
     resp = err;
-  } else {
-    let error = {};
-    // single error thrown in app
-    if (err.status) {
-      error = err;
-    } else {
-      // uncaught exception, og error
-      logError(err.message, {
-        request: {
-          url: req.originalUrl,
-          method: req.method,
-          body: req.body,
-          headers: req.headers,
-          ip: req.ip,
-        },
-        error: {
-          stack: err.stack,
-          message: err.message,
-        },
-      });
-      error = {
-        status: 500,
-        code: 'server-error',
-        title: 'Unknown error occured',
-      };
-    }
-    resp.push(error);
+  } else { // unknow exception
+    resp = serverError();
+    logInfo('Request headers: %s', JSON.stringify(req.headers));
+    logInfo('Request body: %s', JSON.stringify(req.body));
+    logError(err.stack);
   }
 
   // return an array of errors
-  res.status(resp[0].status).json(resp);
+  const { status, ...data } = resp;
+  res.status(status).json(data);
 });
 
 module.exports = app;

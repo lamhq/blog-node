@@ -9,17 +9,43 @@ const logger = require('./log');
 const config = require('../config');
 
 /**
- * Return error object
+ * Return api error data for unauthenticated error
  *
- * @param {String} code
- * @param {String} title
- * @param {Object} status
+ * @param {String} message
  */
-function createError(code, message, status = 500) {
+function unauthenticatedError(message) {
   return {
-    code,
-    title: message,
-    status,
+    code: 'auth/unauthenticated',
+    message,
+    status: 401,
+  };
+}
+
+/**
+ * Return api error data for unauthorized error
+ *
+ * @param {String} message
+ */
+function unauthorizedError(message) {
+  return {
+    code: 'auth/unauthorized',
+    message,
+    status: 403,
+  };
+}
+
+/**
+ * Return api error data for form submission error
+ *
+ * @param {Object} errors form input errors
+ * @param {String} message
+ */
+function formSubmissionError(errors, message = 'Invalid user input') {
+  return {
+    code: 'client/invalid_user_input',
+    message,
+    status: 400,
+    errors,
   };
 }
 
@@ -27,41 +53,40 @@ function createError(code, message, status = 500) {
  * Return api error data for 404 error
  *
  * @param {String} message
- * @param {Object} options
  */
-function notFoundError(message) {
+function notFoundError(message = 'Resource not found') {
   return {
-    code: 'resource-not-found',
+    code: 'client/resource_not_found',
     title: message,
     status: 404,
   };
 }
 
 /**
- * Return api error data for form submission error
+ * Return error for invalid request
  *
  * @param {String} message
- * @param {Object} errors object contain field errors
+ * @param {String} code
  */
-function userInputError(errors) {
+function clientError(message, code = 'client/invalid_request') {
   return {
-    code: 'invalid-user-input',
-    title: 'Invalid input',
+    code,
+    title: message,
     status: 400,
-    detail: errors,
   };
 }
 
 /**
- * Return api error data for unauthenticated error
+ * Return error for unknow error occured in server
  *
  * @param {String} message
+ * @param {String} code
  */
-function unauthorizedError(message) {
+function serverError(message = 'Something went wrong', code = 'server/unknow_error') {
   return {
-    code: 'unauthorized',
+    code,
     title: message,
-    status: 401,
+    status: 500,
   };
 }
 
@@ -212,6 +237,12 @@ function formatDateTime(value) {
 }
 
 module.exports = {
+  unauthorizedError,
+  unauthenticatedError,
+  formSubmissionError,
+  notFoundError,
+  clientError,
+  serverError,
   connectToDb,
   createToken,
   decryptToken,
@@ -221,10 +252,6 @@ module.exports = {
   round,
   buildQuery,
   escapeRegExp,
-  notFoundError,
-  userInputError,
-  createError,
-  unauthorizedError,
   randomCode,
   getDatePart,
   getTimeDiff,
