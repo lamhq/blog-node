@@ -4,7 +4,7 @@ const {
   formSubmissionError,
   notFoundError,
   decryptToken,
-  clientError,
+  requestError,
 } = require('../../../common/utils');
 const {
   validateLoginData,
@@ -27,17 +27,17 @@ async function login(req, res, next) {
       throw formSubmissionError(errors);
     }
 
-    const user = await User.findOne({ email: data.email });
+    const user = await User.findOne({ email: data.username });
     if (!user) {
-      throw clientError('There is no user with this email.', 'login/user_not_found');
+      throw requestError('There is no user with this email.', 'login/user-not-found');
     }
 
     if (!user.isPasswordValid(data.password)) {
-      throw clientError('Invalid password.', 'login/invalid-password');
+      throw requestError('Invalid password.', 'login/invalid-password');
     }
 
     if (user.status !== User.STATUS_ACTIVE) {
-      throw clientError('User is disabled.', 'login/user_is_disabled');
+      throw requestError('User is disabled.', 'login/user-is-disabled');
     }
 
     res.json({
@@ -134,11 +134,16 @@ async function register(req, res, next) {
     }
 
     const user = new User({
-      ...data,
+      email: data.email,
+      displayName: data.fullName,
       status: User.STATUS_ACTIVE,
     });
+    user.setPassword(data.password);
     await user.save();
-    res.json(user.toResponse());
+    res.json({
+      token: user.createToken('30 days'),
+      user: user.toResponse(),
+    });
   } catch (err) {
     next(err);
   }

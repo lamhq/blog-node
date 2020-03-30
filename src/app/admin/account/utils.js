@@ -9,15 +9,16 @@ const { decryptToken } = require('../../../common/utils');
 
 function validateLoginData(data) {
   const rules = {
-    email: {
+    username: {
       presence: {
         allowEmpty: false,
-        message: '^Username can\'t be blank',
+        message: '^common/required-input',
       },
     },
     password: {
       presence: {
         allowEmpty: false,
+        message: '^common/required-input',
       },
     },
   };
@@ -67,7 +68,7 @@ async function checkEmailExist(value) {
   });
   return user
     ? Promise.resolve()
-    : Promise.resolve('does not exist or account is not enabled');
+    : Promise.resolve('^forgot-password/user-not-found');
 }
 
 // validate required fields on forgot password form
@@ -76,8 +77,13 @@ async function validateForgotPwdData(data) {
   validate.validators.emailExists = checkEmailExist;
   const rules = {
     email: {
-      presence: { allowEmpty: false },
-      email: true,
+      email: {
+        message: '^common/invalid-email',
+      },
+      presence: {
+        allowEmpty: false,
+        message: '^common/required-field',
+      },
       emailExists: true,
     },
   };
@@ -136,7 +142,7 @@ function sendMailRequestResetPwd(user) {
   const q = querystring.stringify({
     token: user.createToken('1h').value,
   });
-  const link = `${config.webUrl}/admin/reset-password?${q}`;
+  const link = `${config.webUrl}/reset-password?${q}`;
 
   const message = {
     from: `${appName} <${autoEmail}>`,
@@ -158,7 +164,7 @@ async function checkEmailNotExists(value) {
   });
   return !user
     ? Promise.resolve()
-    : Promise.resolve('is already registered.');
+    : Promise.resolve('^register/email-not-available');
 }
 
 async function validateRegistrationData(data) {
@@ -167,14 +173,33 @@ async function validateRegistrationData(data) {
 
   let errors;
   const constraints = {
-    displayName: {
-      presence: { allowEmpty: false },
-      length: { minimum: 3, maximum: 30 },
+    fullName: {
+      presence: {
+        allowEmpty: false,
+        message: '^common/required-input',
+      },
     },
     email: {
-      presence: { allowEmpty: false },
-      email: true,
+      presence: {
+        allowEmpty: false,
+        message: '^common/required-input',
+      },
+      email: {
+        message: '^common/invalid-email',
+      },
       emailNotExists: true,
+    },
+    password: {
+      presence: {
+        allowEmpty: false,
+        message: '^common/required-input',
+      },
+      length: {
+        minimum: 6,
+        maximum: 30,
+        tooLong: ['common/password-too-long', { max: 30 }],
+        tooShort: ['common/password-too-short', { min: 6 }],
+      },
     },
   };
 

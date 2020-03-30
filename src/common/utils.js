@@ -42,7 +42,7 @@ function unauthorizedError(message) {
  */
 function formSubmissionError(errors, message = 'Invalid user input') {
   return {
-    code: 'client/invalid_user_input',
+    code: 'common/invalid-user-input',
     message,
     status: 400,
     errors,
@@ -56,7 +56,7 @@ function formSubmissionError(errors, message = 'Invalid user input') {
  */
 function notFoundError(message = 'Resource not found') {
   return {
-    code: 'client/resource_not_found',
+    code: 'common/resource-not-found',
     title: message,
     status: 404,
   };
@@ -68,7 +68,7 @@ function notFoundError(message = 'Resource not found') {
  * @param {String} message
  * @param {String} code
  */
-function clientError(message, code = 'client/invalid_request') {
+function requestError(message, code = 'common/invalid-request') {
   return {
     code,
     title: message,
@@ -82,7 +82,7 @@ function clientError(message, code = 'client/invalid_request') {
  * @param {String} message
  * @param {String} code
  */
-function serverError(message = 'Something went wrong', code = 'server/unknow_error') {
+function serverError(message = 'Something went wrong', code = 'server/unknow-error') {
   return {
     code,
     title: message,
@@ -241,7 +241,7 @@ module.exports = {
   unauthenticatedError,
   formSubmissionError,
   notFoundError,
-  clientError,
+  requestError,
   serverError,
   connectToDb,
   createToken,

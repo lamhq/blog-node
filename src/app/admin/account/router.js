@@ -14,7 +14,7 @@ const router = express.Router();
 router.post('/admin/account/login', login);
 
 // user register
-router.post('/admin/account/register', register);
+router.post('/admin/account', register);
 
 // send reset password link to email
 router.post('/admin/account/forgot-password', requestResetPassword);
