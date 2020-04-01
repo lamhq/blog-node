@@ -6,6 +6,7 @@ const User = require('../../models/user');
 const config = require('../../../config');
 const { sendMail } = require('../../../common/mail');
 const { decryptToken } = require('../../../common/utils');
+const { checkEmailNotExists } = require('../../utils');
 
 function validateLoginData(data) {
   const rules = {
@@ -40,7 +41,7 @@ function validateProfileData(data, user) {
 
   // validation rules
   const rules = {
-    fullName: {
+    displayName: {
       presence: true,
       length: { minimum: 3, maximum: 30 },
     },
@@ -158,22 +159,13 @@ function sendMailRequestResetPwd(user) {
   return sendMail(message);
 }
 
-async function checkEmailNotExists(value) {
-  const user = await User.findOne({
-    email: value,
-  });
-  return !user
-    ? Promise.resolve()
-    : Promise.resolve('^register/email-not-available');
-}
-
 async function validateRegistrationData(data) {
   validate.Promise = global.Promise;
   validate.validators.emailNotExists = checkEmailNotExists;
 
   let errors;
   const constraints = {
-    fullName: {
+    displayName: {
       presence: {
         allowEmpty: false,
         message: '^common/required-input',

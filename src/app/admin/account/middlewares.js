@@ -73,7 +73,7 @@ async function updateProfile(req, res, next) {
       throw formSubmissionError(errors);
     }
 
-    user.displayName = data.fullName;
+    user.displayName = data.displayName;
     user.email = data.email;
     if (data.newPassword) {
       user.setPassword(data.newPassword);
@@ -136,7 +136,7 @@ async function register(req, res, next) {
 
     const user = new User({
       email: data.email,
-      displayName: data.fullName,
+      displayName: data.displayName,
       status: User.STATUS_ACTIVE,
     });
     user.setPassword(data.password);
