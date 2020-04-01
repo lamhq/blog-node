@@ -34,13 +34,13 @@ function validateLoginData(data) {
 function validateProfileData(data, user) {
   // function that perform password validation
   validate.validators.checkPassword = (value) => {
-    if (value && !user.isPasswordValid(value)) { return 'is wrong'; }
+    if (value && !user.isPasswordValid(value)) { return '^common/invalid-currentpr-password'; }
     return null;
   };
 
   // validation rules
   const rules = {
-    displayName: {
+    fullName: {
       presence: true,
       length: { minimum: 3, maximum: 30 },
     },

@@ -73,7 +73,8 @@ async function updateProfile(req, res, next) {
       throw formSubmissionError(errors);
     }
 
-    user.displayName = data.displayName;
+    user.displayName = data.fullName;
+    user.email = data.email;
     if (data.newPassword) {
       user.setPassword(data.newPassword);
     }
