@@ -1,11 +1,16 @@
 const User = require('../../models/user');
-const { formSubmissionError, notFoundError } = require('../../../common/utils');
+const {
+  formSubmissionError,
+  notFoundError,
+  requestError,
+  isValidObjectId,
+} = require('../../../common/utils');
 const { validateUserData, getQueryData } = require('./utils');
 
 async function findUsers(req, res, next) {
   try {
     const query = getQueryData(req.query);
-    const total = await User.count(query.conditions);
+    const total = await User.estimatedDocumentCount(query.conditions);
     const items = await User.find(query.conditions)
       .sort(query.sort)
       .skip(query.offset)
@@ -57,20 +62,30 @@ async function getUserDetail(req, res, next) {
 
 async function updateUser(req, res, next) {
   try {
-    const user = await User.findById(req.params.id);
+    const { id } = req.params;
+    if (!isValidObjectId(id)) {
+      throw requestError('Invalid user id');
+    }
+
+    const user = await User.findById(id);
     if (!user) {
       throw notFoundError('No data found');
     }
 
     const data = req.body;
-    const errors = validateUserData(data);
+    const errors = await validateUserData(data, user);
     if (errors) {
       throw formSubmissionError(errors);
     }
 
-    user.title = data.title;
-    user.content = data.content;
-    user.updatedAt = new Date();
+    user.set({
+      email: data.email,
+      displayName: data.displayName,
+      status: User.STATUS_ACTIVE,
+    });
+    if (data.password) {
+      user.setPassword(data.password);
+    }
     await user.save();
     res.json(user.toResponse());
   } catch (err) {

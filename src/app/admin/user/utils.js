@@ -1,9 +1,9 @@
 const validate = require('validate.js');
-const { checkEmailNotExists } = require('../../utils');
+const { checkEmailNotExist } = require('../../utils');
 
-async function validateUserData(data) {
+async function validateUserData(data, user = null) {
   validate.Promise = global.Promise;
-  validate.validators.emailNotExists = checkEmailNotExists;
+  validate.validators.emailNotExists = checkEmailNotExist;
 
   let errors;
   const constraints = {
@@ -21,13 +21,11 @@ async function validateUserData(data) {
       email: {
         message: '^common/invalid-email',
       },
-      emailNotExists: true,
+      emailNotExists: {
+        user,
+      },
     },
     password: {
-      presence: {
-        allowEmpty: false,
-        message: '^common/required-input',
-      },
       length: {
         minimum: 6,
         maximum: 30,

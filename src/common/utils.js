@@ -57,7 +57,7 @@ function formSubmissionError(errors, message = 'Invalid user input') {
 function notFoundError(message = 'Resource not found') {
   return {
     code: 'common/resource-not-found',
-    title: message,
+    message,
     status: 404,
   };
 }
@@ -71,7 +71,7 @@ function notFoundError(message = 'Resource not found') {
 function requestError(message, code = 'common/invalid-request') {
   return {
     code,
-    title: message,
+    message,
     status: 400,
   };
 }
@@ -85,7 +85,7 @@ function requestError(message, code = 'common/invalid-request') {
 function serverError(message = 'Something went wrong', code = 'server/unknow-error') {
   return {
     code,
-    title: message,
+    message,
     status: 500,
   };
 }
@@ -236,6 +236,14 @@ function formatDateTime(value) {
   return value ? moment(value).format('DD/MM/YYYY h:mm a') : '';
 }
 
+/**
+ * Check if a string is a valid mongodb ObjectId
+ * @param {string} value
+ */
+function isValidObjectId(value) {
+  return mongoose.Types.ObjectId.isValid(value);
+}
+
 module.exports = {
   unauthorizedError,
   unauthenticatedError,
@@ -261,4 +269,5 @@ module.exports = {
   formatDate,
   formatDateTime,
   randomString,
+  isValidObjectId,
 };

@@ -6,7 +6,7 @@ const User = require('../../models/user');
 const config = require('../../../config');
 const { sendMail } = require('../../../common/mail');
 const { decryptToken } = require('../../../common/utils');
-const { checkEmailNotExists } = require('../../utils');
+const { checkEmailNotExist, checkEmailExist } = require('../../utils');
 
 function validateLoginData(data) {
   const rules = {
@@ -61,15 +61,6 @@ function validateProfileData(data, user) {
   };
 
   return validate(data, rules);
-}
-
-async function checkEmailExist(value) {
-  const user = await User.findOne({
-    email: value,
-  });
-  return user
-    ? Promise.resolve()
-    : Promise.resolve('^forgot-password/user-not-found');
 }
 
 // validate required fields on forgot password form
@@ -161,7 +152,7 @@ function sendMailRequestResetPwd(user) {
 
 async function validateRegistrationData(data) {
   validate.Promise = global.Promise;
-  validate.validators.emailNotExists = checkEmailNotExists;
+  validate.validators.emailNotExists = checkEmailNotExist;
 
   let errors;
   const constraints = {
