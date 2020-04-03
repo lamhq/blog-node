@@ -25,6 +25,12 @@ async function validateUserData(data, user = null) {
         user,
       },
     },
+    status: {
+      presence: {
+        allowEmpty: false,
+        message: '^common/required-input',
+      },
+    },
     password: {
       length: {
         minimum: 6,

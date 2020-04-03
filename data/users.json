@@ -7,7 +7,7 @@
 		"displayName": "Albert Wesker",
 		"email": "admin1@mailinator.com",
 		"password": "$2a$10$ZfF2V9N3rpazJwveaYfXn.5ye7Sw8y9KfLMhAzk6iNPxZedKr8wO6",
-		"status": "Active",
+		"status": "ACTIVE",
 		"roles": [
 			"ADMIN"
 		],

@@ -38,7 +38,7 @@ async function addUser(req, res, next) {
     const user = new User({
       email: data.email,
       displayName: data.displayName,
-      status: User.STATUS_ACTIVE,
+      status: data.status,
     });
     user.setPassword(data.password);
     await user.save();
@@ -81,7 +81,7 @@ async function updateUser(req, res, next) {
     user.set({
       email: data.email,
       displayName: data.displayName,
-      status: User.STATUS_ACTIVE,
+      status: data.status,
     });
     if (data.password) {
       user.setPassword(data.password);

@@ -64,8 +64,8 @@ const User = mongoose.model('User', schema);
 User.ROLE_ADMIN = 'ADMIN';
 
 // available user statuses
-User.STATUS_PENDING = 'Pending';
-User.STATUS_ACTIVE = 'Active';
-User.STATUS_INACTIVE = 'Inactive';
+User.STATUS_PENDING = 'PENDING';
+User.STATUS_ACTIVE = 'ACTIVE';
+User.STATUS_INACTIVE = 'INACTIVE';
 
 module.exports = User;
