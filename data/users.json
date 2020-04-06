@@ -4,9 +4,9 @@
 			"$oid": "59b39bcf538ff606c04d12db"
 		},
 		"__v": 0,
-		"displayName": "Albert Wesker",
-		"email": "admin1@mailinator.com",
-		"password": "$2a$10$ZfF2V9N3rpazJwveaYfXn.5ye7Sw8y9KfLMhAzk6iNPxZedKr8wO6",
+		"displayName": "John Wick",
+		"email": "john@mailinator.com",
+		"password": "$2a$10$3V79PyhvJBBA2Xz0IKcjnu8HxtncCn4bkwd5DvmR6BJYb.4VDUzdW",
 		"status": "ACTIVE",
 		"roles": [
 			"ADMIN"
@@ -15,7 +15,58 @@
 			"$date": "2018-03-16T09:26:28.311Z"
 		},
 		"updatedAt": {
-			"$date": "2018-03-16T09:27:24.317Z"
+			"$date": "2020-04-03T03:42:32.885Z"
 		}
+	},
+	{
+		"_id": {
+			"$oid": "5e854d8a938286089f25272a"
+		},
+		"roles": [],
+		"email": "she@mailinator.com",
+		"displayName": "Sheva Alomar",
+		"status": "INACTIVE",
+		"password": "$2a$10$XjcBXCb30oPvvFAMBtEzGOLWX0bjtI/7hyfzS/5NsiZoj1G67x8YK",
+		"createdAt": {
+			"$date": "2020-04-02T02:27:23.143Z"
+		},
+		"updatedAt": {
+			"$date": "2020-04-03T03:42:51.016Z"
+		},
+		"__v": 0
+	},
+	{
+		"_id": {
+			"$oid": "5e86b21d96b90a21ef56f3c1"
+		},
+		"roles": [],
+		"email": "mile@mailinator.com",
+		"displayName": "Mile Stone",
+		"status": "ACTIVE",
+		"password": "$2a$10$yDA0IktuyR8eMcYV3O4GsObjG166FP2TC01bp1QvB1GsZsNKJVwn2",
+		"createdAt": {
+			"$date": "2020-04-03T03:48:45.437Z"
+		},
+		"updatedAt": {
+			"$date": "2020-04-03T03:48:45.437Z"
+		},
+		"__v": 0
+	},
+	{
+		"_id": {
+			"$oid": "5e8aa505569881348b6a818d"
+		},
+		"roles": [],
+		"email": "wesker@mailinator.com",
+		"displayName": "Albert Wesker",
+		"status": "ACTIVE",
+		"password": "$2a$10$LMhTCOLKKLhinzdSqhLQH.VdxS0r93yfKsek1LctfRmej7Hd050se",
+		"createdAt": {
+			"$date": "2020-04-06T03:41:57.704Z"
+		},
+		"updatedAt": {
+			"$date": "2020-04-06T03:41:57.704Z"
+		},
+		"__v": 0
 	}
 ]

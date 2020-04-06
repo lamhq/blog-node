@@ -50,9 +50,14 @@ async function addUser(req, res, next) {
 
 async function getUserDetail(req, res, next) {
   try {
-    const user = await User.findById(req.params.id);
+    const { id } = req.params;
+    if (!isValidObjectId(id)) {
+      throw requestError('Invalid user id');
+    }
+
+    const user = await User.findById(id);
     if (!user) {
-      throw notFoundError('No data found');
+      throw notFoundError('User not found');
     }
     res.json(user.toResponse());
   } catch (err) {
@@ -69,7 +74,7 @@ async function updateUser(req, res, next) {
 
     const user = await User.findById(id);
     if (!user) {
-      throw notFoundError('No data found');
+      throw notFoundError('User not found');
     }
 
     const data = req.body;
@@ -95,7 +100,13 @@ async function updateUser(req, res, next) {
 
 async function deleteUser(req, res, next) {
   try {
-    await User.deleteOne({ _id: req.params.id });
+    const { id } = req.params;
+    if (!isValidObjectId(id)) {
+      throw requestError('Invalid user id');
+    }
+
+    const data = await User.deleteOne({ _id: id });
+    console.log(data);
     res.json(true);
   } catch (err) {
     next(err);
