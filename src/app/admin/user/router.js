@@ -6,6 +6,7 @@ const {
   getUserDetail,
   updateUser,
   deleteUser,
+  deleteUsers,
 } = require('./middlewares');
 
 const router = express.Router();
@@ -17,6 +18,7 @@ router.route('/admin/users/:id')
 
 router.route('/admin/users')
   .get([verifyUserToken, findUsers])
-  .post([verifyUserToken, addUser]);
+  .post([verifyUserToken, addUser])
+  .patch([verifyUserToken, deleteUsers]);
 
 module.exports = router;

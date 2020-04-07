@@ -82,7 +82,7 @@ function requestError(message, code = 'common/invalid-request') {
  * @param {String} message
  * @param {String} code
  */
-function serverError(message = 'Something went wrong', code = 'server/unknow-error') {
+function serverError(message = 'Something went wrong', code = 'common/server-error') {
   return {
     code,
     message,

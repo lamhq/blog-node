@@ -54,7 +54,6 @@ async function getUserDetail(req, res, next) {
     if (!isValidObjectId(id)) {
       throw requestError('Invalid user id');
     }
-
     const user = await User.findById(id);
     if (!user) {
       throw notFoundError('User not found');
@@ -106,8 +105,28 @@ async function deleteUser(req, res, next) {
     }
 
     const data = await User.deleteOne({ _id: id });
-    console.log(data);
-    res.json(true);
+    res.json(data.deletedCount === 1);
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function deleteUsers(req, res, next) {
+  try {
+    const { records, action } = req.body;
+    const ids = records.map((userId) => {
+      if (!isValidObjectId(userId)) {
+        throw requestError(`Invalid user id: ${userId}`);
+      }
+      return userId;
+    });
+
+    if (action !== 'delete') {
+      throw requestError(`Invalid action: ${action}`);
+    }
+
+    const data = await User.deleteMany({ _id: { $in: ids } });
+    res.json(data.deletedCount === ids.length);
   } catch (err) {
     next(err);
   }
@@ -119,4 +138,5 @@ module.exports = {
   getUserDetail,
   updateUser,
   deleteUser,
+  deleteUsers,
 };
