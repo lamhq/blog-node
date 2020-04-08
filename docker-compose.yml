@@ -1,12 +1,12 @@
 version: "3"
 services:
   web:
-    image: "restweb:latest"
+    image: "lamhq/rest-web:latest"
     ports:
       - "3001:80"
 
   api:
-    image: "restapi:latest"
+    image: "lamhq/rest-api:latest"
     ports:
       - "3000:3000"
     environment:
