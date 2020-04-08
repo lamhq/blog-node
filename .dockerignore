@@ -1,2 +1,6 @@
 .git/
+.vscode/
+data/
+docs/
+test/
 node_modules/

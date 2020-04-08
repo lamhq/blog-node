@@ -1,25 +1,37 @@
-version: '3'
+version: "3"
 services:
   web:
-    build: .
+    image: "restweb:latest"
     ports:
-      - "8087:3000"
+      - "3001:80"
+
+  api:
+    image: "restapi:latest"
+    ports:
+      - "3000:3000"
     environment:
-      - DB_URI=mongodb://mymongo/blog
-      - SMTP_HOST=smtp.gmail.com
-      - SMTP_PORT=465
-      - SMTP_USER=lam.huynh@magento.codespot.vn
-      - SMTP_PWD=!H4Xwz]S
       - NODE_ENV=production
       - PORT=3000
-      - WEB_URL=http://localhost:3001
-      - SENTRY_DNS=https://1f4bf702246d45d28e4f0d24d17832ca:0679e0a6c0804c19924078f98954f638@sentry.io/264486
+      - DB_URI=mongodb://root:1234@mongo/rest?authSource=admin
       - MONGODB_DEBUG=false
       - DEBUG=*,-express:*,-morgan,-send,-body-parser:*
-  mymongo:
-    image: "mongo:3.4.10"
+      - WEB_URL=http://localhost:3001
+      - SENTRY_DNS=
+      - SMTP_HOST=
+      - SMTP_PORT=
+      - SMTP_USER=
+      - SMTP_PWD=
+
+  mongo:
+    image: "mongo:4.2.3-bionic"
     ports:
-      - "8086:27017"
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: 1234
     volumes:
-     - ./mongo:/data/db
-     - ./data:/scripts
+      - mongo-data:/data/db
+      - ./scripts/db:/scripts
+
+volumes:
+  mongo-data:

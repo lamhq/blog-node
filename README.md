@@ -1,92 +1,92 @@
 # RESTful API Server
 
-## Introduction
-
 Boilerplate source code for a RESTful API Server using ExpressJs
 
 
-## Required softwares
+## Requirements
 
 - [Node.js](https://nodejs.org/) v10.16.0 or higher
-- MongoDB 4.0.0 or higher
+- [MongoDB 4.2.3](https://docs.mongodb.com/manual/installation/)
 - [Yarn](https://yarnpkg.com/)
 - [Visual Studio Code](https://code.visualstudio.com/) + [ESLint extension](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
-- Postman + [Sample API Collection](https://www.getpostman.com/collections/63427fe223e1665557dc)
+- [Postman](https://www.postman.com/downloads/) + [Sample API Collection](https://www.getpostman.com/collections/63427fe223e1665557dc)
+
+
+## Run the source code
+
+### 1. Update MongoDB root's password
+
+To make the api server able to connect to database, please change the MongoDB root's password to `1234`
+
+### 2. Setting environment variables for development
+
+```shell
+cp .env.example .env
+```
+
+
+### 3. Import sample data to mongodb
+
+```shell
+scripts/db/import.sh
+```
+
+
+### 4. Start the api server
+
+``` bash
+yarn install
+yarn start
+```
+
+## Running the demo
+
+### Requirements
+
+- [docker](https://www.docker.com/products/docker-desktop)
+- [docker-compose](https://docs.docker.com/compose/install/) (17.12.0+)
+- Make (optional, wrapper for handy scripts)
+
+
+### Basic usage
+
+- To install and run the system: `make install`
+- To start and stop the system: `make start` and `make stop`
+- To stop the system and remove database: `make uninstall`
 
 
 ## Required knowledges
 
-Read these documents before coding:
-
-- [Git-Flow](https://danielkummer.github.io/git-flow-cheatsheet/index.html)
+- NodeJs
+- MongoDB
 - [Mongoose](https://mongoosejs.com/docs/guide.html)
 - [ExpressJs](https://expressjs.com/)
 - [Validate.js](https://validatejs.org/)
-
-
-## Setup
-
-### 1. Installing dependencies
-
-``` bash
-yarn install
-```
-
-
-### 2. Setting environment variables
-
-Copy `.env.example` to `.env`. Open the edited file and change values to fit your development environment.
-
-
-### 3. Import test data to database
-
-```
-cd data/
-sh import.sh
-```
-
-
-### 4. Run the app
-
-``` bash
-yarn start
-```
-
-
-### 5. Install git-flow
-
-This source code use git-flow for managing branches. Be sure to checkout [git-flow documentation](https://danielkummer.github.io/git-flow-cheatsheet/index.html) to install git-flow first.
-
-
-### 6. Start coding
-
-First, checkout `develop` branch, then you can start developing new feature by running git-flow command `git flow feature start MYFEATURE`
+- [Git-Flow](https://danielkummer.github.io/git-flow-cheatsheet/index.html)
 
 
 ## Directory Layout
 
 ```
 .
-├── /.vscode/                   # contain workspace visual studio code setting
-├── /data/                      # contains sample data and import/export scripts
-├── /modules/                   # list of application's modules
+├── /.vscode/                   # workspace visual studio code setting
+├── /docs/                      # api documentation
+├── /node_modules/              # 3rd-party libraries and utilities
+├── /scripts/                   # contains linux shell scripts for the system
+├── /src/                       # application source code
 │   ├── /common/                # reusable code for all projects
 │   └── /app/                   # code specific for this project
 │       ├── /admin/             # code related to admin's feature
 │       ├── /models/            # contain mongoose model code files
 │       ├── /email/             # contain list of email template files for current module
 │       ├── router.js           # expressjs router object
-│       ├── handlers.js         # a collection of express middleware functions
+│       ├── middlewares.js      # a collection of express middleware functions
 │       ├── helpers.js          # custom javascript functions
 │       └── ...                 # any files specific to the technology we use
-├── /node_modules/              # 3rd-party libraries and utilities
 ├── /test/                      # contain automation test scripts
 ├── .env.example                # environment template file
 ├── .eslintrc.json              # eslint config file
 ├── .gitignore                  # gitignore file
-├── app.js                      # express application object
-├── config.js                   # application's configuration object
-├── index.js                    # entry point of the project
 ├── README.md                   # contains installation instruction
-├── package.json                # contains 3rd party libraries and utilities
+└── package.json                # contains 3rd party libraries and utilities
 ```
