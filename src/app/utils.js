@@ -13,7 +13,7 @@ async function checkEmailNotExist(value, options) {
     };
   }
   const user = await User.findOne(conditions);
-  return user ? '^register/email-not-available' : undefined;
+  return user ? '^app/email-not-available' : undefined;
 }
 
 // return error if there is no user with that email exists
@@ -21,7 +21,7 @@ async function checkEmailExist(value) {
   const user = await User.findOne({
     email: value,
   });
-  return user ? undefined : '^forgot-password/user-not-found';
+  return user ? undefined : '^app/email-not-exist';
 }
 
 module.exports = {

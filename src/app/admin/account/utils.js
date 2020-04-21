@@ -32,18 +32,34 @@ function validateLoginData(data) {
  * @param  User mongoose user model
  * @return object list of validation errors or null
  */
-function validateProfileData(data, user) {
-  // function that perform password validation
+async function validateProfileData(data, user) {
+  validate.Promise = global.Promise;
+  validate.validators.emailNotExists = checkEmailNotExist;
+  let errors;
+
+  // password validation
   validate.validators.checkPassword = (value) => {
-    if (value && !user.isPasswordValid(value)) { return '^common/invalid-currentpr-password'; }
+    if (value && !user.isPasswordValid(value)) { return '^profile/invalid-current-password'; }
     return null;
   };
 
   // validation rules
-  const rules = {
+  const constraints = {
     displayName: {
       presence: true,
       length: { minimum: 3, maximum: 30 },
+    },
+    email: {
+      presence: {
+        allowEmpty: false,
+        message: '^common/required-input',
+      },
+      email: {
+        message: '^common/invalid-email',
+      },
+      emailNotExists: {
+        user,
+      },
     },
     newPassword: (value) => {
       // only validate when value is not empty
@@ -60,7 +76,12 @@ function validateProfileData(data, user) {
     },
   };
 
-  return validate(data, rules);
+  try {
+    await validate.async(data, constraints, { format: 'grouped' });
+  } catch (err) {
+    errors = err;
+  }
+  return errors;
 }
 
 // validate required fields on forgot password form

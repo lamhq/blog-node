@@ -68,7 +68,7 @@ async function updateProfile(req, res, next) {
     if (!user) {
       throw notFoundError('No profile data found');
     }
-    const errors = validateProfileData(data, user);
+    const errors = await validateProfileData(data, user);
     if (errors) {
       throw formSubmissionError(errors);
     }
@@ -97,7 +97,7 @@ async function requestResetPassword(req, res, next) {
       email: data.email,
     });
     await sendMailRequestResetPwd(user);
-    res.json({ message: 'Please check your email.' });
+    res.json(true);
   } catch (err) {
     next(err);
   }

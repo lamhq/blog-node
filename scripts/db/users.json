@@ -6,7 +6,7 @@
 		"__v": 0,
 		"displayName": "John Wick",
 		"email": "john@mailinator.com",
-		"password": "$2a$10$3V79PyhvJBBA2Xz0IKcjnu8HxtncCn4bkwd5DvmR6BJYb.4VDUzdW",
+		"password": "$2a$10$BmMKOzdAaif6sjJzaB3h..hUPLTj3WMNlxW6one1aCcIAoxPyWvzm",
 		"status": "ACTIVE",
 		"roles": [
 			"ADMIN"
@@ -15,18 +15,20 @@
 			"$date": "2018-03-16T09:26:28.311Z"
 		},
 		"updatedAt": {
-			"$date": "2020-04-03T03:42:32.885Z"
+			"$date": "2020-04-21T01:57:24.763Z"
 		}
 	},
 	{
 		"_id": {
 			"$oid": "5e854d8a938286089f25272a"
 		},
-		"roles": [],
 		"email": "she@mailinator.com",
 		"displayName": "Sheva Alomar",
 		"status": "INACTIVE",
 		"password": "$2a$10$XjcBXCb30oPvvFAMBtEzGOLWX0bjtI/7hyfzS/5NsiZoj1G67x8YK",
+		"roles": [
+			"ADMIN"
+		],
 		"createdAt": {
 			"$date": "2020-04-02T02:27:23.143Z"
 		},
@@ -39,7 +41,9 @@
 		"_id": {
 			"$oid": "5e86b21d96b90a21ef56f3c1"
 		},
-		"roles": [],
+		"roles": [
+			"ADMIN"
+		],
 		"email": "mile@mailinator.com",
 		"displayName": "Mile Stone",
 		"status": "ACTIVE",
@@ -56,7 +60,9 @@
 		"_id": {
 			"$oid": "5e8aa505569881348b6a818d"
 		},
-		"roles": [],
+		"roles": [
+			"ADMIN"
+		],
 		"email": "wesker@mailinator.com",
 		"displayName": "Albert Wesker",
 		"status": "ACTIVE",
@@ -66,6 +72,101 @@
 		},
 		"updatedAt": {
 			"$date": "2020-04-06T03:41:57.704Z"
+		},
+		"__v": 0
+	},
+	{
+		"_id": {
+			"$oid": "5e9e537774f2e3555210181f"
+		},
+		"roles": [
+			"ADMIN"
+		],
+		"email": "ted@mailinator.com",
+		"displayName": "Ted Mosby",
+		"status": "ACTIVE",
+		"password": "$2a$10$xIOg6nFr40BvJevjv9sM8uTQ6YuhW4SX2Xg5W6aeAFRvrKD7qo.cG",
+		"createdAt": {
+			"$date": "2020-04-21T01:59:19.319Z"
+		},
+		"updatedAt": {
+			"$date": "2020-04-21T01:59:19.319Z"
+		},
+		"__v": 0
+	},
+	{
+		"_id": {
+			"$oid": "5e9e53e374f2e35552101820"
+		},
+		"roles": [
+			"ADMIN"
+		],
+		"email": "lily@mailinator.com",
+		"displayName": "Lily Aldrin",
+		"status": "INACTIVE",
+		"password": "$2a$10$a9KKVow.4CXKOEK7O6R94OG1kIq1WzQSaPLCG0KZAKz3ZQrJoL1y6",
+		"createdAt": {
+			"$date": "2020-04-21T02:01:07.886Z"
+		},
+		"updatedAt": {
+			"$date": "2020-04-21T02:01:07.886Z"
+		},
+		"__v": 0
+	},
+	{
+		"_id": {
+			"$oid": "5e9e540774f2e35552101821"
+		},
+		"roles": [
+			"ADMIN"
+		],
+		"email": "robin@mailinator.com",
+		"displayName": "Robin Sche",
+		"status": "ACTIVE",
+		"password": "$2a$10$Dhht8T28adLOt4HrsvAJAOE9aHhmQ3QV60jgKuRepDMeJk8qaxW0e",
+		"createdAt": {
+			"$date": "2020-04-21T02:01:43.368Z"
+		},
+		"updatedAt": {
+			"$date": "2020-04-21T02:01:43.368Z"
+		},
+		"__v": 0
+	},
+	{
+		"_id": {
+			"$oid": "5e9e544d74f2e35552101822"
+		},
+		"roles": [
+			"ADMIN"
+		],
+		"email": "marshall@mailinator.com",
+		"displayName": "Marshall Eriksen",
+		"status": "ACTIVE",
+		"password": "$2a$10$P0xhYHONWSdAZLe5.Y7ocOQYxd6mSKgsdLRtlCKTyhlPvsCzQoezi",
+		"createdAt": {
+			"$date": "2020-04-21T02:02:54.044Z"
+		},
+		"updatedAt": {
+			"$date": "2020-04-21T02:02:54.044Z"
+		},
+		"__v": 0
+	},
+	{
+		"_id": {
+			"$oid": "5e9e547474f2e35552101823"
+		},
+		"roles": [
+			"ADMIN"
+		],
+		"email": "barney@mailinator.com",
+		"displayName": "Barney Stinson",
+		"status": "INACTIVE",
+		"password": "$2a$10$hWcRJM7gxCo91Lnd4GKoA.XRCwHfIcXIxgLqk/H.lAiZ/QIB5T2LO",
+		"createdAt": {
+			"$date": "2020-04-21T02:03:32.794Z"
+		},
+		"updatedAt": {
+			"$date": "2020-04-21T02:03:32.794Z"
 		},
 		"__v": 0
 	}

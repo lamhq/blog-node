@@ -39,6 +39,7 @@ async function addUser(req, res, next) {
       email: data.email,
       displayName: data.displayName,
       status: data.status,
+      roles: [User.ROLE_ADMIN],
     });
     user.setPassword(data.password);
     await user.save();
